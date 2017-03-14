@@ -1,13 +1,19 @@
 package org.reladev.anumati;
 
-import java.util.Optional;
-
 public interface SecuredReference<Key> {
 	Key getObjectId();
+	void setObjectId(Key id);
 	SecuredObjectType getObjectType();
 	Key getReferenceId();
 	SecuredReferenceType getReferenceType();
 
 	boolean isOwner();
-	Optional<SecuredActionsSet> getAllowedActions();
+	void setOwner(boolean owner);
+
+	boolean isFixed();
+	void setFixed(boolean fixed);
+
+	SecuredActionsSet getAllowedActions();
+	void setAllowedActions(SecuredAction... actions);
+	void setAllowedActions(SecuredActionsSet actions);
 }

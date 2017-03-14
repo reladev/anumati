@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class AllReferencePermissions implements Iterable<ReferencePermissions> {
+public class UserPermissions implements Iterable<UserReferencePermissions> {
 
 	private boolean superAdmin;
-	private HashMap<ReferenceKey, ReferencePermissions> referenceMap = new HashMap<>();
+	private HashMap<ReferenceKey, UserReferencePermissions> referenceMap = new HashMap<>();
 
 	public boolean isSuperAdmin() {
 		return superAdmin;
@@ -17,16 +17,16 @@ public class AllReferencePermissions implements Iterable<ReferencePermissions> {
 		this.superAdmin = superAdmin;
 	}
 
-	public ReferencePermissions get(Long id, SecuredReferenceType type) {
+	public UserReferencePermissions get(Long id, SecuredReferenceType type) {
 		return referenceMap.get(new ReferenceKey(id, type));
 	}
 
-	public void put(ReferencePermissions privilegeMap) {
+	public void put(UserReferencePermissions privilegeMap) {
 		ReferenceKey referenceKey = new ReferenceKey(privilegeMap.getReferenceId(), privilegeMap.getReferenceType());
 		referenceMap.put(referenceKey, privilegeMap);
 	}
 
-	public Iterator<ReferencePermissions> iterator() {
+	public Iterator<UserReferencePermissions> iterator() {
 		return referenceMap.values().iterator();
 	}
 
@@ -36,9 +36,9 @@ public class AllReferencePermissions implements Iterable<ReferencePermissions> {
 
 	public SecuredActionsSet getAllowedActions(SecuredReference ref) {
 		ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-		ReferencePermissions ReferencePermissions = referenceMap.get(key);
-		if (ReferencePermissions != null) {
-			return ReferencePermissions.getPrivileges(ref.getObjectType());
+		UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
+		if (UserReferencePermissions != null) {
+			return UserReferencePermissions.getAllowedActions(ref.getObjectType());
 		} else {
 			return new SecuredActionsSet();
 		}
@@ -46,8 +46,8 @@ public class AllReferencePermissions implements Iterable<ReferencePermissions> {
 
 	public boolean isAdmin(SecuredReference ref) {
 		ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-		ReferencePermissions ReferencePermissions = referenceMap.get(key);
-		return ReferencePermissions != null && ReferencePermissions.isAdmin();
+		UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
+		return UserReferencePermissions != null && UserReferencePermissions.isAdmin();
 	}
 
 	private class ReferenceKey {

@@ -1,2 +1,3 @@
 include 'core'
 include 'hibernate'
+include 'hibernate_test'

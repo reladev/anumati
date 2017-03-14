@@ -17,17 +17,17 @@ public class SecuredActionsSet {
 	}
 
 	public void add(SecuredAction action) {
-		long flag = 1 << action.ordinal();
+		long flag = 1 << action.getFlagPosition();
 		flags |= flag;
 	}
 
 	public void remove(SecuredAction action) {
-		long flag = 1 << action.ordinal();
+		long flag = 1 << action.getFlagPosition();
 		flags &= ~flag;
 	}
 
 	public boolean contains(SecuredAction action) {
-		long flag = 1 << action.ordinal();
+		long flag = 1 << action.getFlagPosition();
 		return (flags & flag) > 0;
 	}
 
@@ -37,5 +37,9 @@ public class SecuredActionsSet {
 
 	public long getFlags() {
 		return flags;
+	}
+
+	public void merge(SecuredActionsSet actions) {
+		flags |= actions.flags;
 	}
 }

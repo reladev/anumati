@@ -1,21 +1,23 @@
-package org.reladev.anumati.hibernate;
+package org.reladev.anumati.hibernate.entity;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.Formula;
+import org.reladev.anumati.SecuredAction;
 import org.reladev.anumati.SecuredActionsSet;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredReference;
 import org.reladev.anumati.SecuredReferenceObject;
 import org.reladev.anumati.SecuredReferenceType;
+import org.reladev.anumati.hibernate.security.SecurityObjectType;
+import org.reladev.anumati.hibernate.security.SecurityReferenceType;
 
 @Entity
-abstract public class SecurityReference implements SecuredReference {
+public class SecurityReference implements SecuredReference<Long> {
 
 	@Id
 	Long id;
@@ -27,6 +29,7 @@ abstract public class SecurityReference implements SecuredReference {
 	private SecurityReferenceType referenceType;
 
 	private boolean owner;
+	private boolean fixed;
 
 	private Long actionFlags;
 
@@ -38,13 +41,11 @@ abstract public class SecurityReference implements SecuredReference {
 	}
 
 	public SecurityReference(Long objectId, SecuredObjectType objectType, Long referenceId, SecuredReferenceType referenceType) {
-		setId(objectId);
+		this.objectId = objectId;
 		this.objectType = (SecurityObjectType) objectType;
 		this.referenceId = referenceId;
 		this.referenceType = (SecurityReferenceType) referenceType;
 	}
-
-	abstract public void setId(Object id);
 
 	public Long getObjectId() {
 		return objectId;
@@ -78,12 +79,12 @@ abstract public class SecurityReference implements SecuredReference {
 		this.referenceType = referenceType;
 	}
 
-	public Optional<SecuredActionsSet> getAllowedActions() {
+	public SecuredActionsSet getAllowedActions() {
 		if (actionFlags == null) {
-			return Optional.empty();
+			return null;
 
 		} else {
-			return Optional.of(new SecuredActionsSet(actionFlags));
+			return new SecuredActionsSet(actionFlags);
 		}
 	}
 
@@ -91,13 +92,19 @@ abstract public class SecurityReference implements SecuredReference {
 		this.actionFlags = actionFlags;
 	}
 
-	public void setActions(SecurityAction... actions) {
+	@Override
+	public void setAllowedActions(SecuredActionsSet actions) {
+		actionFlags = actions.getFlags();
+	}
+
+	@Override
+	public void setAllowedActions(SecuredAction... actions) {
 		if (actions.length == 0) {
 			actionFlags = null;
 
 		} else {
 			SecuredActionsSet actionsSet = new SecuredActionsSet();
-			for (SecurityAction action : actions) {
+			for (SecuredAction action : actions) {
 				actionsSet.add(action);
 			}
 			actionFlags = actionsSet.getFlags();
@@ -110,6 +117,16 @@ abstract public class SecurityReference implements SecuredReference {
 
 	public void setOwner(boolean owner) {
 		this.owner = owner;
+	}
+
+	@Override
+	public boolean isFixed() {
+		return fixed;
+	}
+
+	@Override
+	public void setFixed(boolean fixed) {
+		this.fixed = fixed;
 	}
 
 	@Override

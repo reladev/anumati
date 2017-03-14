@@ -2,16 +2,16 @@ package org.reladev.anumati;
 
 import java.util.HashMap;
 
-public class ReferencePermissions {
+public class UserReferencePermissions {
 	private Long referenceId;
 	private SecuredReferenceType referenceType;
 
 	private boolean admin;
-	private HashMap<SecuredObjectType, SecuredActionsSet> privilegeMap = new HashMap<>();
+	private HashMap<SecuredObjectType, SecuredActionsSet> actionsMap = new HashMap<>();
 
-	private ReferencePermissions() {}
+	private UserReferencePermissions() {}
 
-	public ReferencePermissions(Long referenceId, SecuredReferenceType referenceType) {
+	public UserReferencePermissions(Long referenceId, SecuredReferenceType referenceType) {
 		this.referenceId = referenceId;
 		this.referenceType = referenceType;
 	}
@@ -32,11 +32,11 @@ public class ReferencePermissions {
 		this.admin = admin;
 	}
 
-	public SecuredActionsSet getPrivileges(SecuredObjectType objectType) {
+	public SecuredActionsSet getAllowedActions(SecuredObjectType objectType) {
 		if (admin) {
 			return new SecuredActionsSet(~0);
 		} else {
-			SecuredActionsSet actionsSet = privilegeMap.get(objectType);
+			SecuredActionsSet actionsSet = actionsMap.get(objectType);
 			if (actionsSet == null) {
 				return new SecuredActionsSet();
 			} else {
@@ -45,8 +45,8 @@ public class ReferencePermissions {
 		}
 	}
 
-	public void setPermissions(SecuredObjectType objectType, SecuredActionsSet actions) {
-		privilegeMap.put(objectType, actions);
+	public void setAllowedActions(SecuredObjectType objectType, SecuredActionsSet actions) {
+		actionsMap.put(objectType, actions);
 	}
 
 

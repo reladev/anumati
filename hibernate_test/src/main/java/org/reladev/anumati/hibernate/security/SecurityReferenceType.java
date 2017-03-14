@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate;
+package org.reladev.anumati.hibernate.security;
 
 import org.reladev.anumati.SecuredReferenceType;
 

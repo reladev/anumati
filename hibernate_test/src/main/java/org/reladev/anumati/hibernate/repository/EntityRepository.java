@@ -1,0 +1,21 @@
+package org.reladev.anumati.hibernate.repository;
+
+import javax.persistence.EntityManager;
+
+import org.reladev.anumati.SecuredByRef;
+import org.reladev.anumati.SecuredObjectType;
+import org.reladev.anumati.hibernate.BaseRepository;
+
+abstract public class EntityRepository<T extends SecuredByRef<Long>> extends BaseRepository<Long, T> {
+	public EntityRepository(Class<T> entityClass, SecuredObjectType objectType, EntityManager entityManager) {
+		super(entityClass, objectType, entityManager);
+	}
+
+	public <E> E find(Class<E> entityClass, Object id) {
+		return entityManager.find(entityClass, id);
+	}
+
+	public T find(Long id) {
+		return entityManager.find(entityClass, id);
+	}
+}
