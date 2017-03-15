@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate.entity;
+package org.reladev.anumati.hibernate_test.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,8 +14,8 @@ import org.reladev.anumati.SecuredReference;
 import org.reladev.anumati.SecuredReferenceObject;
 import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.hibernate.SecuredByRefEntity;
-import org.reladev.anumati.hibernate.security.SecurityObjectType;
-import org.reladev.anumati.hibernate.security.SecurityReferenceType;
+import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
+import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 public class Department extends SecuredByRefEntity<Long> implements SecuredReferenceObject<Long> {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

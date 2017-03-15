@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate.entity;
+package org.reladev.anumati.hibernate_test.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredReference;
 import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.hibernate.SecuredByRefEntity;
-import org.reladev.anumati.hibernate.security.SecurityObjectType;
+import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 public class Asset extends SecuredByRefEntity {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate.entity;
+package org.reladev.anumati.hibernate_test.entity;
 
 import org.reladev.anumati.SecuredUser;
 import org.reladev.anumati.UserPermissions;

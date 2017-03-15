@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate.repository;
+package org.reladev.anumati.hibernate_test.repository;
 
 import javax.persistence.EntityManager;
 

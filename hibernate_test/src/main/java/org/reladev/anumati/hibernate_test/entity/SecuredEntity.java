@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate.entity;
+package org.reladev.anumati.hibernate_test.entity;
 
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredReference;

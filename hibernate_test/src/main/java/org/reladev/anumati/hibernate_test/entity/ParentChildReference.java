@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate.entity;
+package org.reladev.anumati.hibernate_test.entity;
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ import org.hibernate.annotations.Formula;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredParentChild;
-import org.reladev.anumati.hibernate.security.SecurityObjectType;
+import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 @Entity
 @Table(name = "parent_child")

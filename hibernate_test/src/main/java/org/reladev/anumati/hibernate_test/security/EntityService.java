@@ -1,11 +1,11 @@
-package org.reladev.anumati.hibernate.security;
+package org.reladev.anumati.hibernate_test.security;
 
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.hibernate.BaseService;
 import org.reladev.anumati.hibernate.IdDto;
-import org.reladev.anumati.hibernate.entity.Company;
-import org.reladev.anumati.hibernate.entity.Department;
-import org.reladev.anumati.hibernate.repository.EntityRepository;
+import org.reladev.anumati.hibernate_test.entity.Company;
+import org.reladev.anumati.hibernate_test.entity.Department;
+import org.reladev.anumati.hibernate_test.repository.EntityRepository;
 
 abstract public class EntityService<T extends SecuredByRef<Long>, D extends IdDto<Long>> extends BaseService<Long, T, D> {
 

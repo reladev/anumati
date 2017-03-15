@@ -1,8 +1,10 @@
-package org.reladev.anumati.hibernate.entity;
+package org.reladev.anumati.hibernate_test.entity;
 
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.Formula;
@@ -13,14 +15,15 @@ import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredReference;
 import org.reladev.anumati.SecuredReferenceObject;
 import org.reladev.anumati.SecuredReferenceType;
-import org.reladev.anumati.hibernate.security.SecurityObjectType;
-import org.reladev.anumati.hibernate.security.SecurityReferenceType;
+import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
+import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
 public class SecurityReference implements SecuredReference<Long> {
 
 	@Id
-	Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
 	@Formula("object_id")
 	private Long objectId;

@@ -1,9 +1,9 @@
-package org.reladev.anumati.hibernate.security;
+package org.reladev.anumati.hibernate_test.security;
 
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
-import org.reladev.anumati.hibernate.entity.Asset;
-import org.reladev.anumati.hibernate.entity.Project;
+import org.reladev.anumati.hibernate_test.entity.Asset;
+import org.reladev.anumati.hibernate_test.entity.Project;
 
 public enum SecurityObjectType implements SecuredObjectType {
 	COMPANY(null),
