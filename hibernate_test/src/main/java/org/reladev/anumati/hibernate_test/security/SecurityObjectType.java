@@ -3,12 +3,15 @@ package org.reladev.anumati.hibernate_test.security;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.hibernate_test.entity.Asset;
+import org.reladev.anumati.hibernate_test.entity.Company;
+import org.reladev.anumati.hibernate_test.entity.Department;
 import org.reladev.anumati.hibernate_test.entity.Project;
+import org.reladev.anumati.hibernate_test.entity.User;
 
 public enum SecurityObjectType implements SecuredObjectType {
-	COMPANY(null),
-	DEPARTMENT(null),
-	USER(null),
+	COMPANY(Company.class),
+	DEPARTMENT(Department.class),
+	USER(User.class),
 	PROJECT(Project.class),
 	ASSET(Asset.class);
 

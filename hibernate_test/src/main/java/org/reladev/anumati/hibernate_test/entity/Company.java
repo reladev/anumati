@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
@@ -16,7 +20,12 @@ import org.reladev.anumati.hibernate.SecuredByRefEntity;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
+@Entity
 public class Company extends SecuredByRefEntity<Long> implements SecuredReferenceObject<Long> {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "object_id", referencedColumnName = "id")
 	@Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL)

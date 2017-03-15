@@ -32,7 +32,7 @@ abstract public class EntityService<T extends SecuredByRef<Long>, D extends IdDt
 				if (departmentId != null) {
 					department = repository.find(Department.class, departmentId);
 				} else {
-					department = UserContext.getUser().getDepartment();
+					department = UserContext.getUser().getDepartments();
 				}
 				//todo security
 				//UserContext.assertPermissions(department, SecurityAction.VIEW);

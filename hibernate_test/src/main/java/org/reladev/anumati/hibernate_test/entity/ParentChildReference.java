@@ -2,13 +2,10 @@ package org.reladev.anumati.hibernate_test.entity;
 
 import java.util.Objects;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Formula;
@@ -22,9 +19,7 @@ import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 public class ParentChildReference implements SecuredParentChild<Long> {
 
 	@Id
-	@SequenceGenerator(name = "parent_child_id_seq", sequenceName = "parent_child_id_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "parent_child_id_seq")
-	@Access(AccessType.PROPERTY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Formula("parent_id")

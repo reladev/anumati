@@ -12,15 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
-import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredParentChild;
 import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceType;
-import org.reladev.anumati.hibernate.SecuredByRefEntity;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 @Entity
-public class Project extends SecuredByRefEntity<Long> {
+public class Project extends SecuredEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -30,26 +27,24 @@ public class Project extends SecuredByRefEntity<Long> {
 	@Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL)
 	private Set<SecurityReference> securityReferences = new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "parent_id", referencedColumnName = "id")
+	@Where(clause = "parent_type=" + SecurityObjectType.PROJECT_ORDINAL)
+	private Set<ParentChildReference> childReferences = new HashSet<>();
+
+	private String name;
+
 	public Project() {
 		super(SecurityObjectType.PROJECT);
-		this.securityReferences = securityReferences;
 	}
 
 	@Override
 	protected Set<? extends SecuredReference<Long>> getSecuredReferencesForEdit() {
-		//Todo implement
-		return null;
+		return securityReferences;
 	}
 
 	@Override
 	protected Set<? extends SecuredParentChild<Long>> getChildReferencesForEdit() {
-		//Todo implement
-		return null;
-	}
-
-	@Override
-	protected SecuredReference<Long> createSecuredReference(Long objectId, SecuredObjectType objectType, Long referenceId, SecuredReferenceType referenceType) {
-		//Todo implement
-		return null;
+		return childReferences;
 	}
 }

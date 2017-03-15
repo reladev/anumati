@@ -14,6 +14,4 @@ abstract public class SecuredEntity extends SecuredByRefEntity<Long> {
 	protected SecuredReference<Long> createSecuredReference(Long objectId, SecuredObjectType objectType, Long referenceId, SecuredReferenceType referenceType) {
 		return new SecurityReference(objectId, objectType, referenceId, referenceType);
 	}
-
-
 }
