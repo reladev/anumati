@@ -52,13 +52,13 @@ public class SecurityContext {
 		return securedUserContext.getSecuredUser().getUserPermissions();
 	}
 
-	public static <T> void assertPermissions(SecuredByRef<T> entity, SecuredAction action) {
+	public static void assertPermissions(SecuredByRef entity, SecuredAction action) {
 		if (!checkPermissions(entity, action)) {
 			thrower.throwPermissionFailed("Need " + action + " access for " + entity);
 		}
 	}
 
-	public static <T> boolean checkPermissions(SecuredByRef<T> entity, SecuredAction action) {
+	public static boolean checkPermissions(SecuredByRef entity, SecuredAction action) {
 
 		UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
 
@@ -66,11 +66,11 @@ public class SecurityContext {
 			return true;
 		}
 
-		Set<SecuredReference<T>> references = entity.getSecuredReferences();
+		Set<SecuredReference> references = entity.getSecuredReferences();
 		boolean refActionsOnly = entity.isCheckRefOnly();
 
 		boolean check;
-		for (SecuredReference<T> ref : references) {
+		for (SecuredReference ref : references) {
 			if (allReferencePermissions.isAdmin(ref)) {
 				return true;
 			}

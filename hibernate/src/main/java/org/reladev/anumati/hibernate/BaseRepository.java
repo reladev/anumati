@@ -22,7 +22,7 @@ import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.UserReferencePermissions;
 
-public class BaseRepository<Key, T extends SecuredByRef<Key>> {
+public class BaseRepository<T extends SecuredByRef> {
 	protected EntityManager entityManager;
 
 	protected Class<T> entityClass;
@@ -34,12 +34,12 @@ public class BaseRepository<Key, T extends SecuredByRef<Key>> {
 		this.entityManager = entityManager;
 	}
 
-	public SecuredByRef<Key> getReferenceObject(Key id, SecuredObjectType type) {
+	public SecuredByRef getReferenceObject(Object id, SecuredObjectType type) {
 		//noinspection unchecked
 		return (SecuredByRef) entityManager.find(type.getTypeClass(), id);
 	}
 
-	public List<? extends SecuredParentChild<Key>> getParentReferences(Key childId, SecuredObjectType childType, Class<? extends SecuredParentChild> parentChildClass) {
+	public List<? extends SecuredParentChild> getParentReferences(Object childId, SecuredObjectType childType, Class<? extends SecuredParentChild> parentChildClass) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery query = builder.createQuery(parentChildClass);
 		Root root = query.from(parentChildClass);
@@ -48,7 +48,7 @@ public class BaseRepository<Key, T extends SecuredByRef<Key>> {
 			  builder.equal(root.get("childId"), childId),
 			  builder.equal(root.get("childType"), childType));
 
-		List<? extends SecuredParentChild<Key>> resultList = (List<? extends SecuredParentChild<Key>>) entityManager.createQuery(query).getResultList();
+		List<? extends SecuredParentChild> resultList = (List<? extends SecuredParentChild>) entityManager.createQuery(query).getResultList();
 		return resultList;
 	}
 
@@ -58,11 +58,11 @@ public class BaseRepository<Key, T extends SecuredByRef<Key>> {
 		return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
 	}
 
-	public T find(Key id) {
+	public T find(Object id) {
 		return entityManager.find(entityClass, id);
 	}
 
-	public T get(Key id) {
+	public T get(Object id) {
 		return entityManager.getReference(entityClass, id);
 	}
 

@@ -5,13 +5,13 @@ import org.reladev.anumati.SecuredReference;
 import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.hibernate.SecuredByRefEntity;
 
-abstract public class SecuredEntity extends SecuredByRefEntity<Long> {
+abstract public class SecuredEntity extends SecuredByRefEntity {
 	public SecuredEntity(SecuredObjectType type) {
 		super(type);
 	}
 
 	@Override
-	protected SecuredReference<Long> createSecuredReference(Long objectId, SecuredObjectType objectType, Long referenceId, SecuredReferenceType referenceType) {
+	protected SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType) {
 		return new SecurityReference(objectId, objectType, referenceId, referenceType);
 	}
 }

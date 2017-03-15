@@ -1,10 +1,10 @@
 package org.reladev.anumati;
 
-public interface SecuredReference<Key> {
-	Key getObjectId();
-	void setObjectId(Key id);
+public interface SecuredReference {
+	Object getObjectId();
+	void setObjectId(Object id);
 	SecuredObjectType getObjectType();
-	Key getReferenceId();
+	Object getReferenceId();
 	SecuredReferenceType getReferenceType();
 
 	boolean isOwner();

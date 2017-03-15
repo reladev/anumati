@@ -3,10 +3,10 @@ package org.reladev.anumati;
 import java.util.Collections;
 import java.util.Set;
 
-public interface SecuredReferenceObject<Key> extends SecuredByRef<Key> {
-	Key getId();
+public interface SecuredReferenceObject extends SecuredByRef {
+	Object getId();
 	SecuredReferenceType getSecuredReferenceType();
-	default Set<SecuredReferenceObject<Key>> getIncludedReferenceObjects() {
+	default Set<SecuredReferenceObject> getIncludedReferenceObjects() {
 		return Collections.emptySet();
 	}
 }

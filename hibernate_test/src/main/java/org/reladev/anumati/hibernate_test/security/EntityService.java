@@ -7,7 +7,7 @@ import org.reladev.anumati.hibernate_test.entity.Company;
 import org.reladev.anumati.hibernate_test.entity.Department;
 import org.reladev.anumati.hibernate_test.repository.EntityRepository;
 
-abstract public class EntityService<T extends SecuredByRef<Long>, D extends IdDto<Long>> extends BaseService<Long, T, D> {
+abstract public class EntityService<T extends SecuredByRef, D extends IdDto> extends BaseService<T, D> {
 
 	private EntityRepository<T> repository;
 
@@ -32,7 +32,7 @@ abstract public class EntityService<T extends SecuredByRef<Long>, D extends IdDt
 				if (departmentId != null) {
 					department = repository.find(Department.class, departmentId);
 				} else {
-					department = UserContext.getUser().getDepartments();
+					department = UserContext.getUser().getDefaultDepartment();
 				}
 				//todo security
 				//UserContext.assertPermissions(department, SecurityAction.VIEW);

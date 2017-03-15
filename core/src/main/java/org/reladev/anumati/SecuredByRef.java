@@ -2,20 +2,20 @@ package org.reladev.anumati;
 
 import java.util.Set;
 
-public interface SecuredByRef<Key> {
-	Key getId();
+public interface SecuredByRef {
+	Object getId();
 	SecuredObjectType getSecuredObjectType();
 
 
-	Set<SecuredReference<Key>> getSecuredReferences();
-	void addSecuredReference(SecuredReferenceObject<Key> refObj, boolean owner, SecuredAction... actions);
-	void addSecuredReference(SecuredReference<Key> ref);
-	void removeSecuredReference(SecuredReferenceObject<Key> refObj);
+	Set<SecuredReference> getSecuredReferences();
+	void addSecuredReference(SecuredReferenceObject refObj, boolean owner, SecuredAction... actions);
+	void addSecuredReference(SecuredReference ref);
+	void removeSecuredReference(SecuredReferenceObject refObj);
 
-	Set<SecuredParentChild<Key>> getChildReferences();
+	Set<SecuredParentChild> getChildReferences();
 
 	boolean isCascadeAllNeeded();
-	Set<SecuredParentChild<Key>> getChildRefsToCascade();
+	Set<SecuredParentChild> getChildRefsToCascade();
 	void clearCascade();
 
 

@@ -1,11 +1,11 @@
 package org.reladev.anumati;
 
 
-public interface SecuredParentChild<Key> {
-	Key getParentId();
-	void setParentId(Key id);
+public interface SecuredParentChild {
+	Object getParentId();
+	void setParentId(Object id);
 	SecuredObjectType getParentType();
 
-	Key getChildId();
+	Object getChildId();
 	SecuredObjectType getChildType();
 }

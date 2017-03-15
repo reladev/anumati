@@ -6,7 +6,7 @@ import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.hibernate.BaseRepository;
 
-abstract public class EntityRepository<T extends SecuredByRef<Long>> extends BaseRepository<Long, T> {
+abstract public class EntityRepository<T extends SecuredByRef> extends BaseRepository<T> {
 	public EntityRepository(Class<T> entityClass, SecuredObjectType objectType, EntityManager entityManager) {
 		super(entityClass, objectType, entityManager);
 	}

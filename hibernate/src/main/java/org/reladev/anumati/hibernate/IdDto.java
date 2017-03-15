@@ -1,5 +1,5 @@
 package org.reladev.anumati.hibernate;
 
-public interface IdDto<Key> {
-	Key getId();
+public interface IdDto {
+	Object getId();
 }

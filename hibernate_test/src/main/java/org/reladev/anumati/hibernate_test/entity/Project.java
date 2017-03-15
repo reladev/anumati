@@ -39,12 +39,12 @@ public class Project extends SecuredEntity {
 	}
 
 	@Override
-	protected Set<? extends SecuredReference<Long>> getSecuredReferencesForEdit() {
+	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
 		return securityReferences;
 	}
 
 	@Override
-	protected Set<? extends SecuredParentChild<Long>> getChildReferencesForEdit() {
+	protected Set<? extends SecuredParentChild> getChildReferencesForEdit() {
 		return childReferences;
 	}
 }

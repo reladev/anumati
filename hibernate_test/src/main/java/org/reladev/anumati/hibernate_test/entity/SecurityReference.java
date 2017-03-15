@@ -19,7 +19,7 @@ import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class SecurityReference implements SecuredReference<Long> {
+public class SecurityReference implements SecuredReference {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,14 +39,14 @@ public class SecurityReference implements SecuredReference<Long> {
 	protected SecurityReference() {
 	}
 
-	public SecurityReference(SecuredByRef<Long> object, SecuredReferenceObject<Long> refObj) {
+	public SecurityReference(SecuredByRef object, SecuredReferenceObject refObj) {
 		this(object.getId(), object.getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
 	}
 
-	public SecurityReference(Long objectId, SecuredObjectType objectType, Long referenceId, SecuredReferenceType referenceType) {
-		this.objectId = objectId;
+	public SecurityReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType) {
+		this.objectId = (Long) objectId;
 		this.objectType = (SecurityObjectType) objectType;
-		this.referenceId = referenceId;
+		this.referenceId = (Long) referenceId;
 		this.referenceType = (SecurityReferenceType) referenceType;
 	}
 
@@ -54,8 +54,8 @@ public class SecurityReference implements SecuredReference<Long> {
 		return objectId;
 	}
 
-	public void setObjectId(Long objectId) {
-		this.objectId = objectId;
+	public void setObjectId(Object objectId) {
+		this.objectId = (Long) objectId;
 	}
 
 	public SecuredObjectType getObjectType() {
@@ -70,8 +70,8 @@ public class SecurityReference implements SecuredReference<Long> {
 		return referenceId;
 	}
 
-	public void setReferenceId(Long referenceId) {
-		this.referenceId = referenceId;
+	public void setReferenceId(Object referenceId) {
+		this.referenceId = (Long) referenceId;
 	}
 
 	public SecurityReferenceType getReferenceType() {

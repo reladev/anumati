@@ -12,16 +12,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
-import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredReference;
 import org.reladev.anumati.SecuredReferenceObject;
 import org.reladev.anumati.SecuredReferenceType;
-import org.reladev.anumati.hibernate.SecuredByRefEntity;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class Company extends SecuredByRefEntity<Long> implements SecuredReferenceObject<Long> {
+public class Company extends SecuredEntity implements SecuredReferenceObject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -42,14 +40,7 @@ public class Company extends SecuredByRefEntity<Long> implements SecuredReferenc
 	}
 
 	@Override
-	protected Set<? extends SecuredReference<Long>> getSecuredReferencesForEdit() {
+	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
 		return securityReferences;
-	}
-
-
-	@Override
-	protected SecuredReference<Long> createSecuredReference(Long objectId, SecuredObjectType objectType, Long referenceId, SecuredReferenceType referenceType) {
-		//Todo implement
-		return null;
 	}
 }

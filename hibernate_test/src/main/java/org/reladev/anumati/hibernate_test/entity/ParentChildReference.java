@@ -16,7 +16,7 @@ import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 @Entity
 @Table(name = "parent_child")
-public class ParentChildReference implements SecuredParentChild<Long> {
+public class ParentChildReference implements SecuredParentChild {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,14 +32,14 @@ public class ParentChildReference implements SecuredParentChild<Long> {
 	protected ParentChildReference() {
 	}
 
-	public ParentChildReference(SecuredByRef<Long> parent, SecuredByRef<Long> child) {
+	public ParentChildReference(SecuredByRef parent, SecuredByRef child) {
 		this(parent.getId(), parent.getSecuredObjectType(), child.getId(), child.getSecuredObjectType());
 	}
 
-	public ParentChildReference(Long parentId, SecuredObjectType parentType, Long childId, SecuredObjectType childType) {
-		this.parentId = parentId;
+	public ParentChildReference(Object parentId, SecuredObjectType parentType, Object childId, SecuredObjectType childType) {
+		this.parentId = (Long) parentId;
 		this.parentType = (SecurityObjectType) parentType;
-		this.childId = childId;
+		this.childId = (Long) childId;
 		this.childType = (SecurityObjectType) childType;
 	}
 
@@ -55,8 +55,8 @@ public class ParentChildReference implements SecuredParentChild<Long> {
 		return parentId;
 	}
 
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
+	public void setParentId(Object parentId) {
+		this.parentId = (Long) parentId;
 	}
 
 	public SecurityObjectType getParentType() {
@@ -71,8 +71,8 @@ public class ParentChildReference implements SecuredParentChild<Long> {
 		return childId;
 	}
 
-	public void setChildId(Long childId) {
-		this.childId = childId;
+	public void setChildId(Object childId) {
+		this.childId = (Long) childId;
 	}
 
 	public SecurityObjectType getChildType() {

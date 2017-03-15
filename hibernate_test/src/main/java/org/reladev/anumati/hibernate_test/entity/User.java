@@ -62,7 +62,7 @@ public class User extends SecuredEntity implements SecuredUser {
 	}
 
 	@Override
-	protected Set<? extends SecuredReference<Long>> getSecuredReferencesForEdit() {
+	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
 		return securityReferences;
 	}
 

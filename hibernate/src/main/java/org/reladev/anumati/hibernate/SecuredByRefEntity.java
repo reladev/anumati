@@ -18,9 +18,9 @@ import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.SecurityContext;
 
 @MappedSuperclass
-abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
+abstract public class SecuredByRefEntity implements SecuredByRef {
 	private transient boolean cascadeAllNeeded = false;
-	private transient Set<SecuredParentChild<Key>> childRefsToCascade = new HashSet<>();
+	private transient Set<SecuredParentChild> childRefsToCascade = new HashSet<>();
 	private transient SecuredObjectType type;
 
 	@Basic
@@ -32,16 +32,16 @@ abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
 
 
 	@Override
-	public Key getId() {
+	public Object getId() {
 		//Todo implement
 		return null;
 	}
 
-	abstract protected SecuredReference<Key> createSecuredReference(Key objectId, SecuredObjectType objectType, Key referenceId, SecuredReferenceType referenceType);
+	abstract protected SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType);
 
-	abstract protected Set<? extends SecuredReference<Key>> getSecuredReferencesForEdit();
+	abstract protected Set<? extends SecuredReference> getSecuredReferencesForEdit();
 
-	protected Set<? extends SecuredParentChild<Key>> getChildReferencesForEdit() {
+	protected Set<? extends SecuredParentChild> getChildReferencesForEdit() {
 		return Collections.emptySet();
 	}
 
@@ -54,15 +54,15 @@ abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
 	}
 
 	@Override
-	public Set<SecuredReference<Key>> getSecuredReferences() {
+	public Set<SecuredReference> getSecuredReferences() {
 		return Collections.unmodifiableSet(getSecuredReferencesForEdit());
 	}
 
 	@Override
-	public void addSecuredReference(SecuredReferenceObject<Key> refObj, boolean owner, SecuredAction... actions) {
+	public void addSecuredReference(SecuredReferenceObject refObj, boolean owner, SecuredAction... actions) {
 		// Todo clean test to allow this to work
 		//UserContext.assertPermissions(getThis(), SecurityAction.PERMISSIONS);
-		SecuredReference<Key> ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
+		SecuredReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
 		ref.setOwner(owner);
 		ref.setAllowedActions(actions);
 		Set securedReferencesForEdit = getSecuredReferencesForEdit();
@@ -70,8 +70,8 @@ abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
 		securedReferencesForEdit.add(ref);
 
 		if (owner) {
-			for (SecuredReferenceObject<Key> included : refObj.getIncludedReferenceObjects()) {
-				SecuredReference<Key> includedRef = createSecuredReference(getId(), getSecuredObjectType(), included.getId(), included.getSecuredReferenceType());
+			for (SecuredReferenceObject included : refObj.getIncludedReferenceObjects()) {
+				SecuredReference includedRef = createSecuredReference(getId(), getSecuredObjectType(), included.getId(), included.getSecuredReferenceType());
 				includedRef.setOwner(true);
 				includedRef.setAllowedActions(actions);
 				securedReferencesForEdit.remove(includedRef);
@@ -82,8 +82,8 @@ abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
 	}
 
 	@Override
-	public void addSecuredReference(SecuredReference<Key> ref) {
-		SecuredReference<Key> newRef = createSecuredReference(this.getId(), this.getSecuredObjectType(), ref.getReferenceId(), ref.getReferenceType());
+	public void addSecuredReference(SecuredReference ref) {
+		SecuredReference newRef = createSecuredReference(this.getId(), this.getSecuredObjectType(), ref.getReferenceId(), ref.getReferenceType());
 		Set securedReferencesForEdit = getSecuredReferencesForEdit();
 		securedReferencesForEdit.remove(newRef);
 		securedReferencesForEdit.add(newRef);
@@ -92,10 +92,10 @@ abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
 
 
 	@Override
-	public void removeSecuredReference(SecuredReferenceObject<Key> refObj) {
+	public void removeSecuredReference(SecuredReferenceObject refObj) {
 		SecurityContext.assertPermissions(this, SecurityContext.getPermission());
 		SecuredReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
-		Optional<SecuredReference<Key>> existingRef = getSecuredReferences().stream()
+		Optional<SecuredReference> existingRef = getSecuredReferences().stream()
 			  .filter(r -> r.equals(ref))
 			  .findFirst();
 		if (existingRef.isPresent() && existingRef.get().isOwner()) {
@@ -123,11 +123,11 @@ abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
 		return cascadeAllNeeded;
 	}
 
-	public void addChildRefToCascade(SecuredParentChild<Key> ref) {
+	public void addChildRefToCascade(SecuredParentChild ref) {
 		childRefsToCascade.add(ref);
 	}
 
-	public Set<SecuredParentChild<Key>> getChildRefsToCascade(){
+	public Set<SecuredParentChild> getChildRefsToCascade(){
 		return childRefsToCascade;
 	}
 
@@ -139,18 +139,18 @@ abstract public class SecuredByRefEntity<Key> implements SecuredByRef<Key> {
 	//old
 
 
-	public Set<SecuredParentChild<Key>> getChildReferences() {
+	public Set<SecuredParentChild> getChildReferences() {
 		return Collections.unmodifiableSet(getChildReferencesForEdit());
 	}
 
 
-	public void setOwner(SecuredReferenceObject<Key> refObj) {
+	public void setOwner(SecuredReferenceObject refObj) {
 		addSecuredReference(refObj, true);
 	}
 
-	public Set<Key> getReferenceIds(SecuredReferenceType referenceType) {
-		HashSet<Key> ids = new HashSet<>();
-		for (SecuredReference<Key> ref: getSecuredReferences()) {
+	public Set getReferenceIds(SecuredReferenceType referenceType) {
+		HashSet<Object> ids = new HashSet<>();
+		for (SecuredReference ref: getSecuredReferences()) {
 			if (ref.getReferenceType() == referenceType) {
 				ids.add(ref.getReferenceId());
 			}
