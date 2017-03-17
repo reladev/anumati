@@ -44,6 +44,9 @@ public class SecurityReference implements SecuredReference {
 	}
 
 	public SecurityReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType) {
+		if (referenceId == null) {
+			throw new NullPointerException("referenceId");
+		}
 		this.objectId = (Long) objectId;
 		this.objectType = (SecurityObjectType) objectType;
 		this.referenceId = (Long) referenceId;

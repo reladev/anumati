@@ -30,13 +30,6 @@ abstract public class SecuredByRefEntity implements SecuredByRef {
 		this.type = type;
 	}
 
-
-	@Override
-	public Object getId() {
-		//Todo implement
-		return null;
-	}
-
 	abstract protected SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType);
 
 	abstract protected Set<? extends SecuredReference> getSecuredReferencesForEdit();

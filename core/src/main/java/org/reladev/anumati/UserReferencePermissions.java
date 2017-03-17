@@ -3,7 +3,7 @@ package org.reladev.anumati;
 import java.util.HashMap;
 
 public class UserReferencePermissions {
-	private Long referenceId;
+	private Object referenceId;
 	private SecuredReferenceType referenceType;
 
 	private boolean admin;
@@ -11,12 +11,12 @@ public class UserReferencePermissions {
 
 	private UserReferencePermissions() {}
 
-	public UserReferencePermissions(Long referenceId, SecuredReferenceType referenceType) {
+	public UserReferencePermissions(Object referenceId, SecuredReferenceType referenceType) {
 		this.referenceId = referenceId;
 		this.referenceType = referenceType;
 	}
 
-	public Long getReferenceId() {
+	public Object getReferenceId() {
 		return referenceId;
 	}
 
@@ -49,5 +49,14 @@ public class UserReferencePermissions {
 		actionsMap.put(objectType, actions);
 	}
 
+	public void mergePermissions(SecuredObjectType objectType, SecuredActionsSet actions) {
+		SecuredActionsSet existing = actionsMap.get(objectType);
+		if (existing != null) {
+			existing.merge(actions);
+
+		}else {
+			actionsMap.put(objectType, actions);
+		}
+	}
 
 }

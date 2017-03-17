@@ -10,5 +10,8 @@ public class ProjectFactory extends BaseFactory<ProjectFactory, Project> {
 	}
 
 	protected void ensureRequired() {
+		if (entity.getSecuredReferences().isEmpty()) {
+			entity.setOwner(new DepartmentFactory().getOrCreatePersist());
+		}
 	}
 }

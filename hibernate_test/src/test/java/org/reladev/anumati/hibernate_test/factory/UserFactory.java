@@ -15,7 +15,7 @@ public class UserFactory extends BaseFactory<UserFactory, User> {
 		}
 
 		if (entity.getDepartments().isEmpty()) {
-			entity.getDepartments().add(new DepartmentFactory().getOrCreatePersist());
+			entity.setDefaultDepartment(new DepartmentFactory().getOrCreatePersist());
 		}
 	}
 }

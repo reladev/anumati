@@ -1,12 +1,13 @@
 package org.reladev.anumati.hibernate_test.entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,19 +19,24 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
 import org.reladev.anumati.SecuredReference;
+import org.reladev.anumati.SecuredReferenceObject;
+import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.SecuredUser;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
+import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class User extends SecuredEntity implements SecuredUser {
+public class User extends SecuredEntity implements SecuredUser, SecuredReferenceObject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "object_id", referencedColumnName = "id")
-	@Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL)
+	@JoinColumn(name = "object_id",
+		  referencedColumnName = "id",
+		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@Where(clause = "object_type=" + SecurityObjectType.USER_ORDINAL)
 	private Set<SecurityReference> securityReferences = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -38,7 +44,7 @@ public class User extends SecuredEntity implements SecuredUser {
 	private Company company;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "company_id", nullable = false)
+	@JoinColumn(name = "default_department_id", nullable = false)
 	private Department defaultDepartment;
 
 	@ManyToMany
@@ -47,7 +53,7 @@ public class User extends SecuredEntity implements SecuredUser {
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "department_id")
 	)
-	private List<Department> departments;
+	private Set<Department> departments = new HashSet<>();
 
 	private String name;
 
@@ -56,9 +62,19 @@ public class User extends SecuredEntity implements SecuredUser {
 	}
 
 	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
 	public UserPermissions getUserPermissions() {
 		//Todo implement
 		return null;
+	}
+
+	@Override
+	public SecuredReferenceType getSecuredReferenceType() {
+		return SecurityReferenceType.USER;
 	}
 
 	@Override
@@ -74,11 +90,11 @@ public class User extends SecuredEntity implements SecuredUser {
 		this.company = company;
 	}
 
-	public List<Department> getDepartments() {
+	public Set<Department> getDepartments() {
 		return departments;
 	}
 
-	public void setDepartments(List<Department> departments) {
+	public void setDepartments(Set<Department> departments) {
 		this.departments = departments;
 	}
 
@@ -88,5 +104,6 @@ public class User extends SecuredEntity implements SecuredUser {
 
 	public void setDefaultDepartment(Department defaultDepartment) {
 		this.defaultDepartment = defaultDepartment;
+		departments.add(defaultDepartment);
 	}
 }

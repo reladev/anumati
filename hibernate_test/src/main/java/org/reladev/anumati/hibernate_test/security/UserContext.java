@@ -5,12 +5,14 @@ import org.reladev.anumati.hibernate_test.entity.User;
 
 public class UserContext {
 
-	public static void init() {
-		SecurityContext.setSecuredUserContext(UserContext::getUser);
+	private static ThreadLocal<User> user = new ThreadLocal<>();
 
+	public static void init(User user) {
+		UserContext.user.set(user);
+		SecurityContext.setSecuredUserContext(UserContext::getUser);
 	}
 
 	public static User getUser() {
-		return new User();
+		return user.get();
 	}
 }

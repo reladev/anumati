@@ -111,16 +111,16 @@ public class BaseRepository<T extends SecuredByRef> {
 		UserPermissions userPermissions = SecurityContext.getUserPermissions();
 
 		Join refJoin = root.join("securityReferences");
-		for (UserReferencePermissions privileges: userPermissions) {
-			if (privileges.getAllowedActions(type).contains(action)) {
+		for (UserReferencePermissions permissions: userPermissions) {
+			if (permissions.getAllowedActions(type).contains(action)) {
 				if (securityClause == null) {
 					securityClause = builder.and(
-						  builder.equal(refJoin.get("referenceId"), privileges.getReferenceId()),
-						  builder.equal(refJoin.get("referenceType"), privileges.getReferenceType()));
+						  builder.equal(refJoin.get("referenceId"), permissions.getReferenceId()),
+						  builder.equal(refJoin.get("referenceType"), permissions.getReferenceType()));
 				} else {
 					securityClause = builder.or(securityClause, builder.and(
-						  builder.equal(refJoin.get("referenceId"), privileges.getReferenceId()),
-						  builder.equal(refJoin.get("referenceType"), privileges.getReferenceType())));
+						  builder.equal(refJoin.get("referenceId"), permissions.getReferenceId()),
+						  builder.equal(refJoin.get("referenceType"), permissions.getReferenceType())));
 				}
 			}
 		}

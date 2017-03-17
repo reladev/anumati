@@ -17,7 +17,7 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 		this.superAdmin = superAdmin;
 	}
 
-	public UserReferencePermissions get(Long id, SecuredReferenceType type) {
+	public UserReferencePermissions get(Object id, SecuredReferenceType type) {
 		return referenceMap.get(new ReferenceKey(id, type));
 	}
 
@@ -30,7 +30,7 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 		return referenceMap.values().iterator();
 	}
 
-	public void remove(Long id, SecuredReferenceType type) {
+	public void remove(Object id, SecuredReferenceType type) {
 		referenceMap.remove(new ReferenceKey(id, type));
 	}
 

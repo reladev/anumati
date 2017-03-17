@@ -1,6 +1,5 @@
 package org.reladev.anumati.hibernate;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,24 +23,13 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 	protected BaseRepository<T> repository;
 
 	@SuppressWarnings("unchecked")
-	public BaseService(BaseRepository<T> repository) {
+	public BaseService(Class<T> entityClass, BaseRepository<T> repository) {
+		this.entityClass = entityClass;
 		this.repository = repository;
-
-		Class clazz;
-		Class superClass = getClass();
-		do {
-			clazz = superClass;
-			superClass = clazz.getSuperclass();
-		} while (!superClass.equals(BaseService.class));
-
-		ParameterizedType genericSuperclass = (ParameterizedType) clazz.getGenericSuperclass();
-		entityClass = (Class<T>) genericSuperclass.getActualTypeArguments()[0];
 	}
 
-	abstract public T getInstance(D dto);
 	abstract public T createNewInstance(D dto, Class<T> entityClass);
-	abstract public SecuredReference createSecuredReference(Object id, SecuredObjectType objectType, Object referenceObjectId, SecuredReferenceType securedReferenceType);
-	abstract public SecuredParentChild createSecuredParentChild();
+	abstract public SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType);
 	abstract public Class<? extends SecuredParentChild> getSecuredParentChildClass();
 
 	public T get(Object id) {
@@ -54,11 +42,11 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 		T entity;
 		if (dto.getId() != null) {
 			entity = repository.find(dto.getId());
-			SecurityContext.assertPermissions(entity, SecurityContext.getView());
+			SecurityContext.assertPermissions(entity, SecurityContext.getEdit());
 
 		} else {
 			entity = createNewInstance(dto, entityClass);
-			SecurityContext.assertPermissions(entity, SecurityContext.getView());
+			SecurityContext.assertPermissions(entity, SecurityContext.getCreate());
 		}
 		T savedEntity = _save(dto, entity);
 		repository.flush();

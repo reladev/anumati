@@ -10,5 +10,8 @@ public class AssetFactory extends BaseFactory<AssetFactory, Asset> {
 	}
 
 	protected void ensureRequired() {
+		if (entity.getProject() == null) {
+			entity.setProject(new ProjectFactory().getOrCreatePersist());
+		}
 	}
 }

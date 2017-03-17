@@ -1,34 +1,34 @@
 package org.reladev.anumati.hibernate_test.security;
 
+import java.security.InvalidParameterException;
+
 import org.reladev.anumati.SecuredAction;
-import org.reladev.anumati.SecuredActionsSet;
 
 
 public enum SecurityAction implements SecuredAction {
-	VIEW,
-	EDIT,
-	CREATE,
-	DELETE,
-	PERMISSIONS;
+	VIEW('V'),
+	EDIT('E'),
+	CREATE('C'),
+	DELETE('D'),
+	PERMISSIONS('P');
 
-	private SecuredActionsSet allActionsThatInclude = new SecuredActionsSet();
+	private char abbreviation;
 
-	SecurityAction(SecurityAction... includes) {
-		allActionsThatInclude.add(this);
-		for (SecurityAction action: includes) {
-			action.allActionsThatInclude.add(this);
-		}
-	}
-
-
-
-	@Override
-	public SecuredActionsSet getAllActionsThatInclude() {
-		return allActionsThatInclude;
+	SecurityAction(char abbreviation) {
+		this.abbreviation = abbreviation;
 	}
 
 	@Override
 	public int getFlagPosition() {
 		return ordinal();
+	}
+
+	public static SecurityAction valueOfAbbreviation(char abbreviation) {
+		for (SecurityAction action: values()) {
+			if (action.abbreviation == abbreviation) {
+				return action;
+			}
+		}
+		throw new InvalidParameterException("Unknow abbreviation:" + abbreviation);
 	}
 }

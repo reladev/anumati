@@ -20,6 +20,14 @@ public class SecurityContext {
 		SecurityContext.permission = permission;
 	}
 
+	public static void setSecuredUserContext(SecuredUserContext securedUserContext) {
+		SecurityContext.securedUserContext = securedUserContext;
+	}
+
+	public static void setThrowPermissionFailed(PermissionExceptionThrower thrower) {
+		SecurityContext.thrower = thrower;
+	}
+
 	public static SecuredAction getView() {
 		return view;
 	}
@@ -38,14 +46,6 @@ public class SecurityContext {
 
 	public static SecuredAction getPermission() {
 		return permission;
-	}
-
-	public static void setSecuredUserContext(SecuredUserContext securedUserContext) {
-		SecurityContext.securedUserContext = securedUserContext;
-	}
-
-	public static void setThrowPermissionFailed(PermissionExceptionThrower thrower) {
-		SecurityContext.thrower = thrower;
 	}
 
 	public static UserPermissions getUserPermissions() {
@@ -76,7 +76,7 @@ public class SecurityContext {
 			}
 			SecuredActionsSet refActions = ref.getAllowedActions();
 			if (refActions != null) {
-				check = refActions.containsAny(action.getAllActionsThatInclude());
+				check = refActions.contains(action);
 			} else {
 				check = !refActionsOnly && !ref.getReferenceType().isCheckRefOnly();
 			}
@@ -86,7 +86,7 @@ public class SecurityContext {
 					return true;
 				}
 				SecuredActionsSet allowedActions = allReferencePermissions.getAllowedActions(ref);
-				if (allowedActions.containsAny(action.getAllActionsThatInclude())) {
+				if (allowedActions.contains(action)) {
 					return true;
 				}
 			}

@@ -14,14 +14,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
+import org.reladev.anumati.SecuredParentChild;
 import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
+import org.reladev.anumati.hibernate_test.security.DepartmentOwned;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
-import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class Company extends SecuredEntity implements SecuredReferenceObject {
+public class Submission extends SecuredEntity implements DepartmentOwned {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -30,12 +29,28 @@ public class Company extends SecuredEntity implements SecuredReferenceObject {
 	@JoinColumn(name = "object_id",
 		  referencedColumnName = "id",
 		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@Where(clause = "object_type=" + SecurityObjectType.COMPANY_ORDINAL)
+	@Where(clause = "object_type=" + SecurityObjectType.SUBMISSION_ORDINAL)
 	private Set<SecurityReference> securityReferences = new HashSet<>();
 
-	public Company() {
-		super(SecurityObjectType.COMPANY);
-		this.securityReferences = securityReferences;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "parent_id", referencedColumnName = "id")
+	@Where(clause = "parent_type=" + SecurityObjectType.SUBMISSION_ORDINAL)
+	private Set<ParentChildReference> childReferences = new HashSet<>();
+
+	private String name;
+
+	public Submission() {
+		super(SecurityObjectType.SUBMISSION);
+	}
+
+	@Override
+	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
+		return securityReferences;
+	}
+
+	@Override
+	protected Set<? extends SecuredParentChild> getChildReferencesForEdit() {
+		return childReferences;
 	}
 
 	@Override
@@ -43,13 +58,11 @@ public class Company extends SecuredEntity implements SecuredReferenceObject {
 		return id;
 	}
 
-	@Override
-	public SecuredReferenceType getSecuredReferenceType() {
-		return SecurityReferenceType.COMPANY;
+	public String getName() {
+		return name;
 	}
 
-	@Override
-	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
-		return securityReferences;
+	public void setName(String name) {
+		this.name = name;
 	}
 }

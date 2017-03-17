@@ -4,11 +4,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
@@ -22,12 +26,23 @@ public class Asset extends SecuredEntity {
 	private Long id;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "object_id", referencedColumnName = "id")
-	@Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL)
+	@JoinColumn(name = "object_id",
+		  referencedColumnName = "id",
+		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@Where(clause = "object_type=" + SecurityObjectType.ASSET_ORDINAL)
 	private Set<SecurityReference> securityReferences = new HashSet<>();
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "project_id", nullable = false)
+	private Project project;
 
 	public Asset() {
 		super(SecurityObjectType.ASSET);
+	}
+
+	@Override
+	public Long getId() {
+		return id;
 	}
 
 	@Override
@@ -35,4 +50,11 @@ public class Asset extends SecuredEntity {
 		return securityReferences;
 	}
 
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
 }
