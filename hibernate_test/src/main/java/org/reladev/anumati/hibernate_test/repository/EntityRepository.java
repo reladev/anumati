@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.hibernate.BaseRepository;
+import org.reladev.anumati.hibernate.SecuredQueryBuilder;
 import org.reladev.anumati.hibernate_test.security.SecurityAction;
 
 abstract public class EntityRepository<T extends SecuredByRef> extends BaseRepository<T> {
@@ -20,7 +21,7 @@ abstract public class EntityRepository<T extends SecuredByRef> extends BaseRepos
 		return entityManager.find(entityClass, id);
 	}
 
-	public QueryBuilder buildQuery() {
+	public SecuredQueryBuilder buildQuery() {
 		return super.buildQuery(SecurityAction.VIEW);
 	}
 }
