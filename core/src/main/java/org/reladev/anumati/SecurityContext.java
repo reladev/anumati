@@ -1,5 +1,7 @@
 package org.reladev.anumati;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class SecurityContext {
@@ -94,6 +96,18 @@ public class SecurityContext {
 
 		return false;
 	}
+
+	public static <T extends SecuredByRef> List<T> filter(List<T> list, SecuredAction action) {
+		List<T> filteredList = new LinkedList<>();
+		for (T entity : list) {
+			if (SecurityContext.checkPermissions(entity, action)) {
+				filteredList.add(entity);
+			}
+		}
+
+		return filteredList;
+	}
+
 
 	public static void throwPermissionException(String message) {
 		thrower.throwPermissionFailed(message);

@@ -38,6 +38,12 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 		return entity;
 	}
 
+	public List<T> getAll() {
+		List<T> result = repository.findAll();
+		SecurityContext.filter(result, SecurityContext.getView());
+		return result;
+	}
+
 	public T save(D dto) {
 		T entity;
 		if (dto.getId() != null) {

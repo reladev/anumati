@@ -22,7 +22,7 @@ import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.UserReferencePermissions;
 
-public class BaseRepository<T extends SecuredByRef> {
+abstract public class BaseRepository<T extends SecuredByRef> {
 	protected EntityManager entityManager;
 
 	protected Class<T> entityClass;
@@ -61,6 +61,8 @@ public class BaseRepository<T extends SecuredByRef> {
 	public T find(Object id) {
 		return entityManager.find(entityClass, id);
 	}
+
+	abstract public List<T> findAll();
 
 	public T get(Object id) {
 		return entityManager.getReference(entityClass, id);
@@ -137,8 +139,9 @@ public class BaseRepository<T extends SecuredByRef> {
 	}
 
 	public class QueryBuilder {
-		private List<Predicate> predicates = new LinkedList<>();
+		private LinkedList<Predicate> predicates = new LinkedList<>();
 		private List<Order> orderBys = new LinkedList<>();
+		private boolean ignoreSecurity = false;
 
 		private SecuredAction action;
 		private CriteriaBuilder builder;
@@ -146,17 +149,21 @@ public class BaseRepository<T extends SecuredByRef> {
 		private Root<T> root;
 
 		public QueryBuilder() {
+			action = SecurityContext.getView();
 			builder = entityManager.getCriteriaBuilder();
 			query = builder.createQuery(entityClass);
 			root = query.distinct(true).from(entityClass);
 
-			Predicate security = getSecurityPredicate(action, builder, root);
-			predicates.add(security);
 		}
 
 		public QueryBuilder(SecuredAction action) {
-			//Todo implement
+			this();
 			this.action = action;
+		}
+
+		public QueryBuilder ignoreSecurity() {
+			ignoreSecurity = true;
+			return this;
 		}
 
 		public QueryBuilder addPredicate(PredicateFactory<T> factory) {
@@ -177,6 +184,12 @@ public class BaseRepository<T extends SecuredByRef> {
 
 		public PageableList<T> execute(Integer pagePointer, int pageSize) {
 			int start = pagePointer == null ? 0 : pagePointer;
+
+			if (!ignoreSecurity) {
+				Predicate security = getSecurityPredicate(action, builder, root);
+				predicates.addFirst(security);
+			}
+
 			query.where(predicates.toArray(new Predicate[predicates.size()]));
 			query.orderBy(orderBys);
 

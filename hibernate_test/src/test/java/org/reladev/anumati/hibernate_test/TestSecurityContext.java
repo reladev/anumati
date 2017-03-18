@@ -16,7 +16,6 @@ import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.UserReferencePermissions;
 import org.reladev.anumati.hibernate_test.entity.User;
-import org.reladev.anumati.hibernate_test.factory.CompanyFactory;
 import org.reladev.anumati.hibernate_test.factory.UserFactory;
 import org.reladev.anumati.hibernate_test.security.SecurityAction;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
@@ -70,7 +69,7 @@ public class TestSecurityContext {
 	}
 
 	public static void setCompanyPermissions(String... permissions) {
-		setPermissions(new CompanyFactory().getOrCreatePersist(), permissions);
+		setPermissions(UserContext.getUser().getCompany(), permissions);
 	}
 
 	public static void addRef(SecuredByRef entity, SecuredReferenceObject refObj, SecuredAction... actions) {

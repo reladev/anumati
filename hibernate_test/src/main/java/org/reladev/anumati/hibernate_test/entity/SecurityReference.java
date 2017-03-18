@@ -53,6 +53,10 @@ public class SecurityReference implements SecuredReference {
 		this.referenceType = (SecurityReferenceType) referenceType;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 	public Long getObjectId() {
 		return objectId;
 	}
