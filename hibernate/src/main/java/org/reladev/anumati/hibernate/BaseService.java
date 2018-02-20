@@ -173,8 +173,8 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 	}
 
 
-	public PageableList<T> filter(Integer pagePointer, int pageSize, BiFunction<Integer, Integer, PageableList<T>> fetchMethod) {
-		Integer runPointer = pagePointer;
+    public PageableList<T> filterPageable(Integer pagePointer, int pageSize, BiFunction<Integer, Integer, PageableList<T>> fetchMethod) {
+        Integer runPointer = pagePointer;
 		int runSize = pageSize;
 
 		int missing = 0;

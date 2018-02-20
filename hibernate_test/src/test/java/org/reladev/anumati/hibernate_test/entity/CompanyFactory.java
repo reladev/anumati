@@ -1,9 +1,11 @@
-package org.reladev.anumati.hibernate_test.factory;
+package org.reladev.anumati.hibernate_test.entity;
 
-
-import org.reladev.anumati.hibernate_test.entity.Company;
 
 public class CompanyFactory extends BaseFactory<CompanyFactory, Company> {
+
+    public static Company rawCompany(Long id) {
+        return new Company(id);
+    }
 
 	public CompanyFactory() {
 		super(new Company());

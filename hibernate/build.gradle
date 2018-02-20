@@ -3,6 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'idea'
 
+archivesBaseName = 'anumati-hibernate'
 group = 'org.reladev.anumati'
 version = '0.1-SNAPSHOT'
 

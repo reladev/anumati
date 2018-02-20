@@ -38,6 +38,11 @@ public class Company extends SecuredEntity implements SecuredReferenceObject {
 		this.securityReferences = securityReferences;
 	}
 
+    /*test*/ Company(Long id) {
+        this();
+        this.id = id;
+    }
+
 	@Override
 	public Long getId() {
 		return id;

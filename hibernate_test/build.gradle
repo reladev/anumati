@@ -24,6 +24,12 @@ dependencies {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+test {
+    testLogging {
+        events "skipped", "failed"
+    }
+}
+
 jar {
    from sourceSets.main.allJava
 }

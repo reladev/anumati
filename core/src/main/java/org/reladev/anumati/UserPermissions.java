@@ -1,13 +1,21 @@
 package org.reladev.anumati;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 
 public class UserPermissions implements Iterable<UserReferencePermissions> {
 
 	private boolean superAdmin;
-	private HashMap<ReferenceKey, UserReferencePermissions> referenceMap = new HashMap<>();
+    private HashSet<SecuredRole> roles = new HashSet<>();
+    private HashSet<SecuredPrivilege> privileges = new HashSet<>();
+    private HashMap<ReferenceKey, UserReferencePermissions> referenceMap = new HashMap<>();
+
+    ////////////////////////////////////////////////////////////////
+    //  Admin Methods
+    ////////////////////////////////////////////////////////////////
+
 
 	public boolean isSuperAdmin() {
 		return superAdmin;
@@ -16,6 +24,74 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 	public void setSuperAdmin(boolean superAdmin) {
 		this.superAdmin = superAdmin;
 	}
+
+    ////////////////////////////////////////////////////////////////
+    //  Role Methods
+    ////////////////////////////////////////////////////////////////
+
+    public boolean hasRole(SecuredRole role) {
+        if (roles.contains(role)) {
+            return true;
+
+        } else {
+            for (UserReferencePermissions permissions : referenceMap.values()) {
+                if (permissions.hasRole(role)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean hasRole(SecuredReference ref, SecuredRole role) {
+        ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
+        UserReferencePermissions refPermissions = referenceMap.get(key);
+        if (refPermissions != null) {
+            return refPermissions.hasRole(role);
+        }
+        return false;
+    }
+
+    public void addRole(SecuredRole role) {
+        roles.add(role);
+
+    }
+
+    public void removeRole(SecuredRole role) {
+        roles.remove(role);
+    }
+
+    ////////////////////////////////////////////////////////////////
+    //  Privilege Methods
+    ////////////////////////////////////////////////////////////////
+
+    public boolean hasPrivilege(SecuredPrivilege privilege) {
+        if (privileges.contains(privilege)) {
+            return true;
+
+        } else {
+            for (UserReferencePermissions permissions : referenceMap.values()) {
+                if (permissions.hasPrivilege(privilege)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void addPrivilege(SecuredPrivilege privilege) {
+        privileges.add(privilege);
+
+    }
+
+    public void removePrivilege(SecuredPrivilege privilege) {
+        privileges.remove(privilege);
+    }
+
+    ////////////////////////////////////////////////////////////////
+    //  Reference Methods
+    ////////////////////////////////////////////////////////////////
+
 
 	public UserReferencePermissions get(Object id, SecuredReferenceType type) {
 		return referenceMap.get(new ReferenceKey(id, type));

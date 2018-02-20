@@ -14,6 +14,6 @@ public class CompanyRepository extends EntityRepository<Company> {
 
 	@Override
 	public List<Company> findAll() {
-		return buildQuery().execute();
-	}
+        return buildQuery().ignoreSecurity().execute();
+    }
 }

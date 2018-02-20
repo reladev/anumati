@@ -3,6 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'idea'
 
+archivesBaseName = 'anumati-core'
 group = 'org.reladev.anumati'
 version = '0.1-SNAPSHOT'
 
@@ -59,15 +60,15 @@ uploadArchives {
 
             pom.project {
                name 'Anumati Security'
-               artifactId 'anumati'
+               artifactId 'anumati-core'
                packaging 'jar'
                description 'Permission based security authorization framework'
-               url 'http://code.google.com/p/slotted/'
+               url 'https://github.com/reladev/anumati'
 
                scm {
-                   url 'scm:git:https://github.com/reladev/anumati'
-                   connection 'scm:git:https://github.com/reladev/anumati'
-                   developerConnection 'scm:git:https://github.com/reladev/anumati'
+                   url 'scm:git:https://github.com/reladev/anumati.git'
+                   connection 'scm:git:https://github.com/reladev/anumati.git'
+                   developerConnection 'scm:git:https://github.com/reladev/anumati.git'
                }
 
                licenses {

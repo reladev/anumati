@@ -14,6 +14,6 @@ public class ProjectRepository extends EntityRepository<Project> {
 
 	@Override
     public List<Project> findAll() {
-        return buildQuery().execute();
-	}
+        return buildQuery().ignoreSecurity().execute();
+    }
 }

@@ -1,4 +1,4 @@
-package org.reladev.anumati.hibernate_test.factory;
+package org.reladev.anumati.hibernate_test.entity;
 
 import java.util.HashMap;
 import java.util.function.Consumer;

@@ -59,6 +59,12 @@ public class Project extends SecuredEntity implements SecuredReferenceObject, Co
 		return Collections.singleton(company);
 	}
 
+    protected Project(Long id) {
+        super(SecurityObjectType.PROJECT);
+
+        this.id = id;
+    }
+
 	@Override
 	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
 		return securityReferences;

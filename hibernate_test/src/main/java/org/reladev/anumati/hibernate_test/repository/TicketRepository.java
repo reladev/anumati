@@ -13,7 +13,7 @@ public class TicketRepository extends EntityRepository<Ticket> {
     }
 
     public List<Ticket> findAll() {
-        return buildQuery()
+        return buildQuery().ignoreSecurity()
 			  .addOrderBy((builder, query, root) ->
 				    builder.asc(root.get("name")))
 			  .execute();

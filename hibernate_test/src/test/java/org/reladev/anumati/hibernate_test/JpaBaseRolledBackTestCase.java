@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.reladev.anumati.hibernate_test.factory.BaseFactory;
+import org.reladev.anumati.hibernate_test.entity.BaseFactory;
 
 public abstract class JpaBaseRolledBackTestCase {
     protected static EntityManagerFactory emf;
@@ -27,6 +27,7 @@ public abstract class JpaBaseRolledBackTestCase {
 
     @Before
     public void beginTransaction() {
+        BaseFactory.clearCache();
         em = emf.createEntityManager();
         em.getTransaction().begin();
 	    BaseFactory.setEntityManager(em);

@@ -12,11 +12,12 @@ import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredReferenceObject;
 import org.reladev.anumati.SecuredReferenceType;
+import org.reladev.anumati.SecuredRole;
 import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.UserReferencePermissions;
 import org.reladev.anumati.hibernate_test.entity.User;
-import org.reladev.anumati.hibernate_test.factory.UserFactory;
+import org.reladev.anumati.hibernate_test.entity.UserFactory;
 import org.reladev.anumati.hibernate_test.security.SecurityAction;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.UserContext;
@@ -44,6 +45,10 @@ public class TestSecurityContext {
 
 	}
 
+    ////////////////////////////////////////////////////////////////
+    //  Admin Methods
+    ////////////////////////////////////////////////////////////////
+
 	public static void setSuperAdmin(boolean superAdmin) {
 		userPermissions.setSuperAdmin(superAdmin);
 	}
@@ -53,6 +58,28 @@ public class TestSecurityContext {
 		permissions.setAdmin(true);
 		userPermissions.put(permissions);
 	}
+
+    ////////////////////////////////////////////////////////////////
+    //  Role Methods
+    ////////////////////////////////////////////////////////////////
+
+    public static void addRoles(SecuredRole... roles) {
+        for (SecuredRole role : roles) {
+            userPermissions.addRole(role);
+        }
+
+    }
+
+    public static void addRoles(SecuredReferenceObject refObj, SecuredRole... roles) {
+        UserReferencePermissions permissions = new UserReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType());
+        for (SecuredRole role : roles) {
+            permissions.addRole(role);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////
+    //  Role Methods
+    ////////////////////////////////////////////////////////////////
 
 	public static void setPermissions(SecuredReferenceObject refObj, SecuredObjectType type, SecuredAction... actions) {
 		UserReferencePermissions permissions = new UserReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType());
