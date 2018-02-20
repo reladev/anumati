@@ -9,8 +9,8 @@ import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 public class SubmissionRepository extends EntityRepository<Submission> {
 	public SubmissionRepository(EntityManager entityManager) {
-		super(Submission.class, SecurityObjectType.PROJECT, entityManager);
-	}
+        super(Submission.class, SecurityObjectType.TICKET, entityManager);
+    }
 
 	@Override
 	public List<Submission> findAll() {

@@ -1,26 +1,26 @@
 package org.reladev.anumati.article;
 
-import org.reladev.anumati.hibernate_test.dto.ProjectDto;
+import org.reladev.anumati.hibernate_test.dto.TicketDto;
 
-public class ProjectAclService {
-    ProjectRepository projectRepository;
+public class TicketAclService {
+    TicketRepository ticketRepository;
 
-    public Project save(ProjectDto dto) {
+    public Ticket save(TicketDto dto) {
         Long id = dto.getId();
 
-        Project project;
+        Ticket ticket;
         if (id != null) {
-            project = projectRepository.find(id);
-            SecurityContext.assertAcl(project, "EDIT");
+            ticket = ticketRepository.find(id);
+            SecurityContext.assertAcl(ticket, "EDIT");
 
         } else {
             SecurityContext.assertRole("MANAGER");
-            project = new Project();
+            ticket = new Ticket();
             //...Attach ACLs...
         }
 
-        project.setName(dto.getName());
+        ticket.setName(dto.getName());
 
-        return project;
+        return ticket;
     }
 }

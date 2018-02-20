@@ -1,33 +1,33 @@
 package org.reladev.anumati.article;
 
-import org.reladev.anumati.hibernate_test.dto.ProjectDto;
+import org.reladev.anumati.hibernate_test.dto.TicketDto;
 import org.reladev.anumati.hibernate_test.entity.Department;
 import org.reladev.anumati.hibernate_test.security.SecurityAction;
 import org.reladev.anumati.hibernate_test.security.UserContext;
 
-public class ProjectAnumati2Service {
-    ProjectRepository projectRepository;
+public class TicketAnumati2Service {
+    TicketRepository ticketRepository;
     DepartmentRepository departmentRepository;
 
-    public Project save(ProjectDto dto) {
+    public Ticket save(TicketDto dto) {
         Long id = dto.getId();
 
-        Project project;
+        Ticket ticket;
         if (id != null) {
-            project = projectRepository.find(id);
-            SecurityContext.assertPermissions(project, SecurityAction.EDIT);
+            ticket = ticketRepository.find(id);
+            SecurityContext.assertPermissions(ticket, SecurityAction.EDIT);
 
         } else {
-            project = new Project();
+            ticket = new Ticket();
             Long departmentId = dto.getOwnerId();
             Department department = getDepartment(dto.getOwnerId());
-            project.setOwner(department);
-            SecurityContext.assertPermissions(project, SecurityAction.CREATE);
+            ticket.setOwner(department);
+            SecurityContext.assertPermissions(ticket, SecurityAction.CREATE);
         }
 
-        project.setName(dto.getName());
+        ticket.setName(dto.getName());
 
-        return project;
+        return ticket;
     }
 
     private Department getDepartment(Long departmentId) {

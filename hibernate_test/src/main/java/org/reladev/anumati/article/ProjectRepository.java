@@ -1,7 +1,7 @@
 package org.reladev.anumati.article;
 
-public class ProjectRepository {
-    public Project find(Long id) {
+public class TicketRepository {
+    public Ticket find(Long id) {
         //Todo implement
         return null;
     }

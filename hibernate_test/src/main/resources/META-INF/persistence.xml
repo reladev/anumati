@@ -7,7 +7,7 @@
         <class>org.reladev.anumati.hibernate_test.entity.Company</class>
         <class>org.reladev.anumati.hibernate_test.entity.Department</class>
         <class>org.reladev.anumati.hibernate_test.entity.ParentChildReference</class>
-        <class>org.reladev.anumati.hibernate_test.entity.Project</class>
+        <class>org.reladev.anumati.hibernate_test.entity.Ticket</class>
         <class>org.reladev.anumati.hibernate_test.entity.SecurityReference</class>
         <class>org.reladev.anumati.hibernate_test.entity.User</class>
         <properties>

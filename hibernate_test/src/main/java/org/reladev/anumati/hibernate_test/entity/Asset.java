@@ -32,9 +32,7 @@ public class Asset extends SecuredEntity {
 	@Where(clause = "object_type=" + SecurityObjectType.ASSET_ORDINAL)
 	private Set<SecurityReference> securityReferences = new HashSet<>();
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "project_id", nullable = false)
-	private Project project;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "ticket_id", nullable = false) private Ticket ticket;
 
 	public Asset() {
 		super(SecurityObjectType.ASSET);
@@ -50,11 +48,11 @@ public class Asset extends SecuredEntity {
 		return securityReferences;
 	}
 
-	public Project getProject() {
-		return project;
-	}
+    public Ticket getTicket() {
+        return ticket;
+    }
 
-	public void setProject(Project project) {
-		this.project = project;
-	}
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
 }

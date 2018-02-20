@@ -20,15 +20,15 @@ import org.reladev.anumati.hibernate_test.entity.SecurityReference;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 @Entity
-public class Project extends SecuredByRefEntity {
+public class Ticket extends SecuredByRefEntity {
     @Id private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) @JoinColumn(name = "object_id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)) @Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) @JoinColumn(name = "object_id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)) @Where(clause = "object_type=" + SecurityObjectType.TICKET_ORDINAL)
     private Set<SecurityReference> securityReferences = new HashSet<>();
 
     private String name;
 
-    public Project() {
+    public Ticket() {
         super(null);
     }
 

@@ -1,13 +1,13 @@
 package org.reladev.anumati.hibernate_test.factory;
 
 
-import org.reladev.anumati.hibernate_test.entity.Project;
+import org.reladev.anumati.hibernate_test.entity.Ticket;
 
-public class ProjectFactory extends BaseFactory<ProjectFactory, Project> {
+public class TicketFactory extends BaseFactory<TicketFactory, Ticket> {
 
-	public ProjectFactory() {
-		super(new Project());
-	}
+    public TicketFactory() {
+        super(new Ticket());
+    }
 
 	protected void ensureRequired() {
 		if (entity.getSecuredReferences().isEmpty()) {

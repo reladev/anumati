@@ -3,8 +3,8 @@ package org.reladev.anumati.hibernate_test.dto;
 import org.reladev.anumati.hibernate.IdDto;
 import org.reladev.anumati.hibernate_test.security.DepartmentOwnedDto;
 
-public class ProjectDto implements IdDto, DepartmentOwnedDto {
-	private Long id;
+public class TicketDto implements IdDto, DepartmentOwnedDto {
+    private Long id;
 	private Long ownerId;
 	private String name;
 

@@ -7,81 +7,79 @@ import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.reladev.anumati.hibernate_test.dto.ProjectDto;
+import org.reladev.anumati.hibernate_test.dto.TicketDto;
 import org.reladev.anumati.hibernate_test.entity.Company;
 import org.reladev.anumati.hibernate_test.entity.Department;
-import org.reladev.anumati.hibernate_test.entity.Project;
+import org.reladev.anumati.hibernate_test.entity.Ticket;
 import org.reladev.anumati.hibernate_test.factory.CompanyFactory;
 import org.reladev.anumati.hibernate_test.factory.DepartmentFactory;
-import org.reladev.anumati.hibernate_test.factory.ProjectFactory;
-import org.reladev.anumati.hibernate_test.repository.ProjectRepository;
+import org.reladev.anumati.hibernate_test.factory.TicketFactory;
+import org.reladev.anumati.hibernate_test.repository.TicketRepository;
 import org.reladev.anumati.hibernate_test.security.UserContext;
-import org.reladev.anumati.hibernate_test.service.ProjectService;
+import org.reladev.anumati.hibernate_test.service.TicketService;
 
-public class ProjectTest extends JpaBaseRolledBackTestCase {
-	ProjectService service;
+public class TicketTest extends JpaBaseRolledBackTestCase {
+    TicketService service;
 
 	@Before
 	public void init() {
 		TestSecurityContext.init();
-		service = new ProjectService(new ProjectRepository(em));
-	}
+        service = new TicketService(new TicketRepository(em));
+    }
 
 	@Test
 	public void testCreate() {
-		ProjectDto projectDto = new ProjectDto();
-		projectDto.setName("Test1");
+        TicketDto ticketDto = new TicketDto();
+        ticketDto.setName("Test1");
 
-		Assertions.assertThatExceptionThrownBy(() -> service.save(projectDto));
+        Assertions.assertThatExceptionThrownBy(() -> service.save(ticketDto));
 
-		TestSecurityContext.setCompanyPermissions("DEPARTMENT_V", "PROJECT_C");
+        TestSecurityContext.setCompanyPermissions("DEPARTMENT_V", "TICKET_C");
 
-		service.save(projectDto);
-	}
+        service.save(ticketDto);
+    }
 
 	@Test
 	public void testEdit() {
-		Project project = new ProjectFactory().getOrCreatePersist();
+        Ticket ticket = new TicketFactory().getOrCreatePersist();
 
-		ProjectDto projectDto = new ProjectDto();
-		projectDto.setId(project.getId());
-		projectDto.setName("Test2");
+        TicketDto ticketDto = new TicketDto();
+        ticketDto.setId(ticket.getId());
+        ticketDto.setName("Test2");
 
-		Assertions.assertThatExceptionThrownBy(() -> service.save(projectDto));
+        Assertions.assertThatExceptionThrownBy(() -> service.save(ticketDto));
 
-		TestSecurityContext.setCompanyPermissions("DEPARTMENT_V", "PROJECT_C");
+        TestSecurityContext.setCompanyPermissions("DEPARTMENT_V", "TICKET_C");
 
-		Project actual = service.save(projectDto);
-	}
+        Ticket actual = service.save(ticketDto);
+    }
 
 	@Test
 	public void testFilter() {
-		Project projectA = new ProjectFactory().getOrCreatePersist();
-		Department departmentB = new DepartmentFactory().createPersist();
-		Project projectB = new ProjectFactory().createPersist();
+        Ticket ticketA = new TicketFactory().getOrCreatePersist();
+        Department departmentB = new DepartmentFactory().createPersist();
+        Ticket ticketB = new TicketFactory().createPersist();
 
 		Company companyZ = new CompanyFactory().createPersist();
 		Department departmentZ = new DepartmentFactory().create();
-		Project projectZ = new ProjectFactory().getOrCreatePersist();
+        Ticket ticketZ = new TicketFactory().getOrCreatePersist();
 
-		List<Project> all = service.getAll();
+        List<Ticket> all = service.getAll();
 
 		assertThat(all).hasSize(0);
 
-		TestSecurityContext.setCompanyPermissions("PROJECT_V");
-		all = service.getAll();
+        TestSecurityContext.setCompanyPermissions("TICKET_V");
+        all = service.getAll();
 
 		assertThat(all)
-			  .hasSize(2)
-			  .contains(projectA, projectB);
+			  .hasSize(2).contains(ticketA, ticketB);
 
 		TestSecurityContext.setCompanyPermissions();
-		TestSecurityContext.setPermissions(UserContext.getUser().getDefaultDepartment(), "PROJECT_V");
+        TestSecurityContext.setPermissions(UserContext.getUser().getDefaultDepartment(), "TICKET_V");
 
 		all = service.getAll();
 		assertThat(all)
-			  .hasSize(1)
-			  .contains(projectA);
+			  .hasSize(1).contains(ticketA);
 
 	}
 }

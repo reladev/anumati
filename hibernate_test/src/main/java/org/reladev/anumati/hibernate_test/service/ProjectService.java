@@ -1,19 +1,19 @@
 package org.reladev.anumati.hibernate_test.service;
 
-import org.reladev.anumati.hibernate_test.dto.ProjectDto;
-import org.reladev.anumati.hibernate_test.entity.Project;
-import org.reladev.anumati.hibernate_test.repository.ProjectRepository;
+import org.reladev.anumati.hibernate_test.dto.TicketDto;
+import org.reladev.anumati.hibernate_test.entity.Ticket;
+import org.reladev.anumati.hibernate_test.repository.TicketRepository;
 
-public class ProjectService extends EntityService<Project, ProjectDto> {
+public class TicketService extends EntityService<Ticket, TicketDto> {
 
-	public ProjectService(ProjectRepository repository) {
-		super(Project.class, repository);
-	}
+    public TicketService(TicketRepository repository) {
+        super(Ticket.class, repository);
+    }
 
 	@Override
-	protected Project _save(ProjectDto dto, Project project) {
-		project.setName(dto.getName());
+    protected Ticket _save(TicketDto dto, Ticket ticket) {
+        ticket.setName(dto.getName());
 
-		return project;
-	}
+        return ticket;
+    }
 }

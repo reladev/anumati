@@ -20,28 +20,24 @@ import org.reladev.anumati.hibernate_test.security.DepartmentOwned;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 @Entity
-public class Project extends SecuredEntity implements DepartmentOwned {
-	@Id
+public class Ticket extends SecuredEntity implements DepartmentOwned {
+    @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "object_id",
 		  referencedColumnName = "id",
-		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL)
-	private Set<SecurityReference> securityReferences = new HashSet<>();
+		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)) @Where(clause = "object_type=" + SecurityObjectType.TICKET_ORDINAL) private Set<SecurityReference> securityReferences = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "parent_id", referencedColumnName = "id")
-	@Where(clause = "parent_type=" + SecurityObjectType.PROJECT_ORDINAL)
-	private Set<ParentChildReference> childReferences = new HashSet<>();
+	@JoinColumn(name = "parent_id", referencedColumnName = "id") @Where(clause = "parent_type=" + SecurityObjectType.TICKET_ORDINAL) private Set<ParentChildReference> childReferences = new HashSet<>();
 
 	private String name;
 
-	public Project() {
-		super(SecurityObjectType.PROJECT);
-	}
+    public Ticket() {
+        super(SecurityObjectType.TICKET);
+    }
 
 	@Override
 	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {

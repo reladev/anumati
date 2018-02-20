@@ -1,25 +1,25 @@
 package org.reladev.anumati.article;
 
-import org.reladev.anumati.hibernate_test.dto.ProjectDto;
+import org.reladev.anumati.hibernate_test.dto.TicketDto;
 
-public class ProjectRoleService {
-    ProjectRepository projectRepository;
+public class TicketRoleService {
+    TicketRepository ticketRepository;
 
-    public Project save(ProjectDto dto) {
+    public Ticket save(TicketDto dto) {
         Long id = dto.getId();
 
-        Project project;
+        Ticket ticket;
         if (id != null) {
             SecurityContext.assertRole("MANAGER", "MEMBER");
-            project = projectRepository.find(id);
+            ticket = ticketRepository.find(id);
 
         } else {
             SecurityContext.assertRole("MANAGER");
-            project = new Project();
+            ticket = new Ticket();
         }
 
-        project.setName(dto.getName());
+        ticket.setName(dto.getName());
 
-        return project;
+        return ticket;
     }
 }
