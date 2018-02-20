@@ -16,11 +16,11 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Where;
 import org.reladev.anumati.SecuredParentChild;
 import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.hibernate_test.security.DepartmentOwned;
+import org.reladev.anumati.hibernate_test.security.ProjectOwned;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 
 @Entity
-public class Ticket extends SecuredEntity implements DepartmentOwned {
+public class Ticket extends SecuredEntity implements ProjectOwned {
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

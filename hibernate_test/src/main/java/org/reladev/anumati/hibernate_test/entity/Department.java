@@ -25,26 +25,24 @@ import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class Department extends SecuredEntity implements SecuredReferenceObject, CompanyOwned {
-	@Id
+public class Project extends SecuredEntity implements SecuredReferenceObject, CompanyOwned {
+    @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "object_id",
 		  referencedColumnName = "id",
-		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@Where(clause = "object_type=" + SecurityObjectType.DEPARTMENT_ORDINAL)
-	private Set<SecurityReference> securityReferences = new HashSet<>();
+		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)) @Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL) private Set<SecurityReference> securityReferences = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "company_id", nullable = false)
 	private Company company;
 
 
-	public Department() {
-		super(SecurityObjectType.DEPARTMENT);
-	}
+    public Project() {
+        super(SecurityObjectType.PROJECT);
+    }
 
 	@Override
 	public Long getId() {
@@ -53,8 +51,8 @@ public class Department extends SecuredEntity implements SecuredReferenceObject,
 
 	@Override
 	public SecuredReferenceType getSecuredReferenceType() {
-		return SecurityReferenceType.DEPARTMENT;
-	}
+        return SecurityReferenceType.PROJECT;
+    }
 
 	@Override
 	public Set<SecuredReferenceObject> getIncludedReferenceObjects() {

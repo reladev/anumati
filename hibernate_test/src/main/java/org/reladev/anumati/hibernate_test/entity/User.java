@@ -43,17 +43,11 @@ public class User extends SecuredEntity implements SecuredUser, SecuredReference
 	@JoinColumn(name = "company_id", nullable = false)
 	private Company company;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "default_department_id", nullable = false)
-	private Department defaultDepartment;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "default_project_id", nullable = false) private Project defaultProject;
 
 	@ManyToMany
-	@JoinTable(
-			name = "user_department",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "department_id")
-	)
-	private Set<Department> departments = new HashSet<>();
+	@JoinTable(name = "user_project",
+			joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "project_id")) private Set<Project> projects = new HashSet<>();
 
 	private String name;
 
@@ -90,20 +84,20 @@ public class User extends SecuredEntity implements SecuredUser, SecuredReference
 		this.company = company;
 	}
 
-	public Set<Department> getDepartments() {
-		return departments;
-	}
+    public Set<Project> getProjects() {
+        return projects;
+    }
 
-	public void setDepartments(Set<Department> departments) {
-		this.departments = departments;
-	}
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
+    }
 
-	public Department getDefaultDepartment() {
-		return defaultDepartment;
-	}
+    public Project getDefaultProject() {
+        return defaultProject;
+    }
 
-	public void setDefaultDepartment(Department defaultDepartment) {
-		this.defaultDepartment = defaultDepartment;
-		departments.add(defaultDepartment);
-	}
+    public void setDefaultProject(Project defaultProject) {
+        this.defaultProject = defaultProject;
+        projects.add(defaultProject);
+    }
 }

@@ -1,13 +1,13 @@
 package org.reladev.anumati.hibernate_test.factory;
 
 
-import org.reladev.anumati.hibernate_test.entity.Department;
+import org.reladev.anumati.hibernate_test.entity.Project;
 
-public class DepartmentFactory extends BaseFactory<DepartmentFactory, Department> {
+public class ProjectFactory extends BaseFactory<ProjectFactory, Project> {
 
-	public DepartmentFactory() {
-		super(new Department());
-	}
+    public ProjectFactory() {
+        super(new Project());
+    }
 
 	protected void ensureRequired() {
 		if (entity.getSecuredReferences().isEmpty()) {

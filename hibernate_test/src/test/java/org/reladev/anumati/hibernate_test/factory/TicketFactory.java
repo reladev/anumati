@@ -11,7 +11,7 @@ public class TicketFactory extends BaseFactory<TicketFactory, Ticket> {
 
 	protected void ensureRequired() {
 		if (entity.getSecuredReferences().isEmpty()) {
-			entity.setOwner(new DepartmentFactory().getOrCreatePersist());
-		}
+            entity.setOwner(new ProjectFactory().getOrCreatePersist());
+        }
 	}
 }

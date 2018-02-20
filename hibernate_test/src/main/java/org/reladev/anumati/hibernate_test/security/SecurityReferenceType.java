@@ -4,8 +4,8 @@ import org.reladev.anumati.SecuredReferenceType;
 
 public enum SecurityReferenceType implements SecuredReferenceType {
 	COMPANY,
-	DEPARTMENT,
-	USER(true);
+    PROJECT,
+    USER(true);
 
 	private boolean checkRefOnly;
 

@@ -9,10 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.reladev.anumati.hibernate_test.dto.TicketDto;
 import org.reladev.anumati.hibernate_test.entity.Company;
-import org.reladev.anumati.hibernate_test.entity.Department;
+import org.reladev.anumati.hibernate_test.entity.Project;
 import org.reladev.anumati.hibernate_test.entity.Ticket;
 import org.reladev.anumati.hibernate_test.factory.CompanyFactory;
-import org.reladev.anumati.hibernate_test.factory.DepartmentFactory;
+import org.reladev.anumati.hibernate_test.factory.ProjectFactory;
 import org.reladev.anumati.hibernate_test.factory.TicketFactory;
 import org.reladev.anumati.hibernate_test.repository.TicketRepository;
 import org.reladev.anumati.hibernate_test.security.UserContext;
@@ -34,7 +34,7 @@ public class TicketTest extends JpaBaseRolledBackTestCase {
 
         Assertions.assertThatExceptionThrownBy(() -> service.save(ticketDto));
 
-        TestSecurityContext.setCompanyPermissions("DEPARTMENT_V", "TICKET_C");
+        TestSecurityContext.setCompanyPermissions("PROJECT_V", "TICKET_C");
 
         service.save(ticketDto);
     }
@@ -49,7 +49,7 @@ public class TicketTest extends JpaBaseRolledBackTestCase {
 
         Assertions.assertThatExceptionThrownBy(() -> service.save(ticketDto));
 
-        TestSecurityContext.setCompanyPermissions("DEPARTMENT_V", "TICKET_C");
+        TestSecurityContext.setCompanyPermissions("PROJECT_V", "TICKET_C");
 
         Ticket actual = service.save(ticketDto);
     }
@@ -57,11 +57,11 @@ public class TicketTest extends JpaBaseRolledBackTestCase {
 	@Test
 	public void testFilter() {
         Ticket ticketA = new TicketFactory().getOrCreatePersist();
-        Department departmentB = new DepartmentFactory().createPersist();
+        Project projectB = new ProjectFactory().createPersist();
         Ticket ticketB = new TicketFactory().createPersist();
 
 		Company companyZ = new CompanyFactory().createPersist();
-		Department departmentZ = new DepartmentFactory().create();
+        Project projectZ = new ProjectFactory().create();
         Ticket ticketZ = new TicketFactory().getOrCreatePersist();
 
         List<Ticket> all = service.getAll();
@@ -75,7 +75,7 @@ public class TicketTest extends JpaBaseRolledBackTestCase {
 			  .hasSize(2).contains(ticketA, ticketB);
 
 		TestSecurityContext.setCompanyPermissions();
-        TestSecurityContext.setPermissions(UserContext.getUser().getDefaultDepartment(), "TICKET_V");
+        TestSecurityContext.setPermissions(UserContext.getUser().getDefaultProject(), "TICKET_V");
 
 		all = service.getAll();
 		assertThat(all)
