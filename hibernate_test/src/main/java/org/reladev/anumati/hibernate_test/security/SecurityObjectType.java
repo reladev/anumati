@@ -5,7 +5,6 @@ import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.hibernate_test.entity.Asset;
 import org.reladev.anumati.hibernate_test.entity.Company;
 import org.reladev.anumati.hibernate_test.entity.Project;
-import org.reladev.anumati.hibernate_test.entity.Submission;
 import org.reladev.anumati.hibernate_test.entity.Ticket;
 import org.reladev.anumati.hibernate_test.entity.User;
 
@@ -14,7 +13,6 @@ public enum SecurityObjectType implements SecuredObjectType {
     PROJECT(Project.class),
     USER(User.class),
     TICKET(Ticket.class),
-    SUBMISSION(Submission.class),
 	ASSET(Asset.class);
 
 	public static final int COMPANY_ORDINAL = 0;
