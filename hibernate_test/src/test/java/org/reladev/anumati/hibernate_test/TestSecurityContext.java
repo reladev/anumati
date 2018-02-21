@@ -37,8 +37,8 @@ public class TestSecurityContext {
 		if (user != null) {
 			User spy = Mockito.spy(user);
 
-			setAdminPermissions(user);
-			when(spy.getUserPermissions()).thenReturn(userPermissions);
+            setAdminPermissions(user, true);
+            when(spy.getUserPermissions()).thenReturn(userPermissions);
 
 			SecurityContext.setBaseActionEnums(SecurityAction.VIEW, SecurityAction.EDIT, SecurityAction.CREATE, SecurityAction.DELETE, SecurityAction.PERMISSIONS);
 			UserContext.init(spy);
@@ -54,11 +54,10 @@ public class TestSecurityContext {
 		userPermissions.setSuperAdmin(superAdmin);
 	}
 
-	public static void setAdminPermissions(SecuredReferenceObject refObj) {
-		UserReferencePermissions permissions = new UserReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType());
-		permissions.setAdmin(true);
-		userPermissions.put(permissions);
-	}
+    public static void setAdminPermissions(SecuredReferenceObject refObj, boolean admin) {
+        UserReferencePermissions permissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
+        permissions.setAdmin(admin);
+    }
 
     ////////////////////////////////////////////////////////////////
     //  Role Methods

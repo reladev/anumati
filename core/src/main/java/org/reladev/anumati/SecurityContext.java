@@ -62,6 +62,11 @@ public class SecurityContext {
 
     public static boolean checkRole(SecuredRole role) {
         UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
+
+        if (allReferencePermissions.isSuperAdmin()) {
+            return true;
+        }
+
         return allReferencePermissions.hasRole(role);
     }
 
@@ -103,6 +108,11 @@ public class SecurityContext {
 
     public static boolean checkPrivilege(SecuredPrivilege privilege) {
         UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
+
+        if (allReferencePermissions.isSuperAdmin()) {
+            return true;
+        }
+
         return allReferencePermissions.hasPrivilege(privilege);
     }
 
