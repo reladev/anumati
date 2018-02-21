@@ -3,7 +3,6 @@ package org.reladev.anumati.hibernate_test;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.reladev.anumati.AccessDeniedException;
 import org.reladev.anumati.SecurityContext;
@@ -12,10 +11,11 @@ import org.reladev.anumati.hibernate_test.entity.ProjectFactory;
 import org.reladev.anumati.hibernate_test.entity.Ticket;
 import org.reladev.anumati.hibernate_test.entity.TicketFactory;
 import org.reladev.anumati.hibernate_test.repository.TicketRepository;
+import org.reladev.anumati.hibernate_test.security.SecurityPrivilege;
 import org.reladev.anumati.hibernate_test.security.SecurityRole;
 import org.reladev.anumati.hibernate_test.service.TicketService;
 
-public class PureRoleTests extends JpaBaseRolledBackTestCase {
+public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
     TicketService service;
 
     @Before
@@ -61,7 +61,6 @@ public class PureRoleTests extends JpaBaseRolledBackTestCase {
     }
 
     @Test
-    @Ignore
     public void testUserWithRoleOnReference() {
         Project project = new ProjectFactory().getOrCreatePersist();
         Ticket ticket = new TicketFactory().project(project).createPersist();
@@ -75,6 +74,59 @@ public class PureRoleTests extends JpaBaseRolledBackTestCase {
         }
 
         SecurityContext.assertRole(ticket, SecurityRole.MANAGER);
+    }
+
+
+    @Test
+    public void testUserWithNoPrivilegesFails() {
+        try {
+            SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+            fail("Excepted AccessDeniedException");
+        } catch (AccessDeniedException ignore) {
+        }
+    }
+
+    @Test
+    public void testUserWithPrivilege() {
+        Project project = new ProjectFactory().getOrCreatePersist();
+        Ticket ticket = new TicketFactory().project(project).createPersist();
+
+        TestSecurityContext.addPrivileges(SecurityPrivilege.SOME_TASK);
+
+        SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPrivilege(ticket, SecurityPrivilege.SOME_TASK);
+
+        try {
+            SecurityContext.assertPrivilege(SecurityPrivilege.RECOVER);
+            fail("Excepted AccessDeniedException");
+        } catch (AccessDeniedException ignore) {
+        }
+
+    }
+
+    @Test
+    public void testUserWith2Privilege() {
+        TestSecurityContext.addPrivileges(SecurityPrivilege.SOME_TASK);
+        TestSecurityContext.addPrivileges(SecurityPrivilege.RECOVER);
+
+        SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPrivilege(SecurityPrivilege.RECOVER);
+    }
+
+    @Test
+    public void testUserWithPrivilegeOnReference() {
+        Project project = new ProjectFactory().getOrCreatePersist();
+        Ticket ticket = new TicketFactory().project(project).createPersist();
+
+        TestSecurityContext.addPrivileges(project, SecurityPrivilege.SOME_TASK);
+
+        try {
+            SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+            fail("Excepted AccessDeniedException");
+        } catch (AccessDeniedException ignore) {
+        }
+
+        SecurityContext.assertPrivilege(ticket, SecurityPrivilege.SOME_TASK);
     }
 
 

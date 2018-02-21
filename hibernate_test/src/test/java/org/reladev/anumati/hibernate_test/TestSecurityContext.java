@@ -10,6 +10,7 @@ import org.reladev.anumati.SecuredAction;
 import org.reladev.anumati.SecuredActionsSet;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
+import org.reladev.anumati.SecuredPrivilege;
 import org.reladev.anumati.SecuredReferenceObject;
 import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.SecuredRole;
@@ -74,6 +75,24 @@ public class TestSecurityContext {
         UserReferencePermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
         for (SecuredRole role : roles) {
             refPermissions.addRole(role);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////
+    //  Privilege Methods
+    ////////////////////////////////////////////////////////////////
+
+    public static void addPrivileges(SecuredPrivilege... privileges) {
+        for (SecuredPrivilege privilege : privileges) {
+            userPermissions.addPrivilege(privilege);
+        }
+
+    }
+
+    public static void addPrivileges(SecuredReferenceObject refObj, SecuredPrivilege... privileges) {
+        UserReferencePermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
+        for (SecuredPrivilege privilege : privileges) {
+            refPermissions.addPrivilege(privilege);
         }
     }
 

@@ -56,15 +56,14 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
     ////////////////////////////////////////////////////////////////
 
     public boolean hasPrivilege(SecuredPrivilege privilege) {
-        if (privileges.contains(privilege)) {
-            return true;
+        return privileges.contains(privilege);
+    }
 
-        } else {
-            for (UserReferencePermissions permissions : referenceMap.values()) {
-                if (permissions.hasPrivilege(privilege)) {
-                    return true;
-                }
-            }
+    public boolean hasPrivilege(SecuredReference ref, SecuredPrivilege privilege) {
+        ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
+        UserReferencePermissions refPermissions = referenceMap.get(key);
+        if (refPermissions != null) {
+            return refPermissions.hasPrivilege(privilege);
         }
         return false;
     }

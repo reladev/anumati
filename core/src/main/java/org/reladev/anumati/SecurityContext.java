@@ -95,15 +95,45 @@ public class SecurityContext {
         return false;
     }
 
-    public static void assertPrivelege(SecuredPrivilege privilege) {
-        if (!checkPrivelege(privilege)) {
+    public static void assertPrivilege(SecuredPrivilege privilege) {
+        if (!checkPrivilege(privilege)) {
             thrower.throwPermissionFailed("Need " + privilege);
         }
     }
 
-    public static boolean checkPrivelege(SecuredPrivilege privilege) {
+    public static boolean checkPrivilege(SecuredPrivilege privilege) {
         UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
         return allReferencePermissions.hasPrivilege(privilege);
+    }
+
+    public static void assertPrivilege(SecuredByRef entity, SecuredPrivilege privilege) {
+        if (!checkPrivilege(entity, privilege)) {
+            thrower.throwPermissionFailed("Need " + privilege);
+        }
+    }
+
+    public static boolean checkPrivilege(SecuredByRef entity, SecuredPrivilege privilege) {
+        UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
+
+        if (allReferencePermissions.isSuperAdmin()) {
+            return true;
+        }
+
+        if (allReferencePermissions.hasPrivilege(privilege)) {
+            return true;
+        }
+
+        Set<SecuredReference> references = entity.getSecuredReferences();
+        for (SecuredReference ref : references) {
+            if (allReferencePermissions.isAdmin(ref)) {
+                return true;
+            }
+            if (allReferencePermissions.hasPrivilege(ref, privilege)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 	public static void assertPermissions(SecuredByRef entity, SecuredAction action) {
