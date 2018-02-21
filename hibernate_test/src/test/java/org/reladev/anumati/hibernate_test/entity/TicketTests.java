@@ -59,7 +59,7 @@ public class TicketTests extends JpaBaseRolledBackTestCase {
     @Test
     @Ignore
     public void testEdit() {
-        Ticket ticket = new org.reladev.anumati.hibernate_test.factory.TicketFactory().getOrCreatePersist();
+        Ticket ticket = new TicketFactory().getOrCreatePersist();
 
         TicketDto ticketDto = new TicketDto();
         ticketDto.setId(ticket.getId());
@@ -75,13 +75,13 @@ public class TicketTests extends JpaBaseRolledBackTestCase {
     @Test
     @Ignore
     public void testFilter() {
-        Ticket ticketA = new org.reladev.anumati.hibernate_test.factory.TicketFactory().getOrCreatePersist();
+        Ticket ticketA = new TicketFactory().getOrCreatePersist();
         Project projectB = new ProjectFactory().createPersist();
-        Ticket ticketB = new org.reladev.anumati.hibernate_test.factory.TicketFactory().createPersist();
+        Ticket ticketB = new TicketFactory().createPersist();
 
         Company companyZ = new CompanyFactory().createPersist();
         Project projectZ = new ProjectFactory().create();
-        Ticket ticketZ = new org.reladev.anumati.hibernate_test.factory.TicketFactory().getOrCreatePersist();
+        Ticket ticketZ = new TicketFactory().getOrCreatePersist();
 
         List<Ticket> all = service.getAll();
 

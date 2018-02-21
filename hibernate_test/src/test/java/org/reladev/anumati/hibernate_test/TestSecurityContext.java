@@ -71,9 +71,9 @@ public class TestSecurityContext {
     }
 
     public static void addRoles(SecuredReferenceObject refObj, SecuredRole... roles) {
-        UserReferencePermissions permissions = new UserReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType());
+        UserReferencePermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
         for (SecuredRole role : roles) {
-            permissions.addRole(role);
+            refPermissions.addRole(role);
         }
     }
 

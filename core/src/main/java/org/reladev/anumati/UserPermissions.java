@@ -30,17 +30,7 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
     ////////////////////////////////////////////////////////////////
 
     public boolean hasRole(SecuredRole role) {
-        if (roles.contains(role)) {
-            return true;
-
-        } else {
-            for (UserReferencePermissions permissions : referenceMap.values()) {
-                if (permissions.hasRole(role)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return roles.contains(role);
     }
 
     public boolean hasRole(SecuredReference ref, SecuredRole role) {
@@ -96,6 +86,15 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 	public UserReferencePermissions get(Object id, SecuredReferenceType type) {
 		return referenceMap.get(new ReferenceKey(id, type));
 	}
+
+    public UserReferencePermissions getOrCreate(Object id, SecuredReferenceType type) {
+        UserReferencePermissions refPermissions = referenceMap.get(new ReferenceKey(id, type));
+        if (refPermissions == null) {
+            refPermissions = new UserReferencePermissions(id, type);
+            referenceMap.put(new ReferenceKey(id, type), refPermissions);
+        }
+        return refPermissions;
+    }
 
 	public void put(UserReferencePermissions privilegeMap) {
 		ReferenceKey referenceKey = new ReferenceKey(privilegeMap.getReferenceId(), privilegeMap.getReferenceType());

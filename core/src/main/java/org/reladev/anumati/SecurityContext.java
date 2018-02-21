@@ -78,6 +78,10 @@ public class SecurityContext {
             return true;
         }
 
+        if (allReferencePermissions.hasRole(role)) {
+            return true;
+        }
+
         Set<SecuredReference> references = entity.getSecuredReferences();
         for (SecuredReference ref : references) {
             if (allReferencePermissions.isAdmin(ref)) {

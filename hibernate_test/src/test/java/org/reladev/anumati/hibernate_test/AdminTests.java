@@ -15,7 +15,7 @@ import org.reladev.anumati.hibernate_test.repository.TicketRepository;
 import org.reladev.anumati.hibernate_test.security.SecurityRole;
 import org.reladev.anumati.hibernate_test.service.TicketService;
 
-public class PureRoleTests extends JpaBaseRolledBackTestCase {
+public class AdminTests extends JpaBaseRolledBackTestCase {
     TicketService service;
 
     @Before
