@@ -1,7 +1,5 @@
 package org.reladev.anumati.hibernate_test;
 
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -22,6 +20,8 @@ import org.reladev.anumati.hibernate_test.entity.UserFactory;
 import org.reladev.anumati.hibernate_test.security.SecurityAction;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.UserContext;
+
+import static org.mockito.Mockito.when;
 
 public class TestSecurityContext {
 	private static UserPermissions userPermissions;
@@ -65,7 +65,7 @@ public class TestSecurityContext {
 
     public static void addRoles(SecuredRole... roles) {
         for (SecuredRole role : roles) {
-            userPermissions.addRole(role);
+            userPermissions.addRoles(role);
         }
 
     }
@@ -83,7 +83,7 @@ public class TestSecurityContext {
 
     public static void addPrivileges(SecuredPrivilege... privileges) {
         for (SecuredPrivilege privilege : privileges) {
-            userPermissions.addPrivilege(privilege);
+            userPermissions.addPrivileges(privilege);
         }
 
     }

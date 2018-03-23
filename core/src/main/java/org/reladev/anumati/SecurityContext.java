@@ -54,6 +54,37 @@ public class SecurityContext {
 		return securedUserContext.getSecuredUser().getUserPermissions();
 	}
 
+    public static SecuredUser getUser() {
+        SecuredUser securedUser = securedUserContext.getSecuredUser();
+        if (securedUser == null) {
+            thrower.throwPermissionFailed("User not defined.");
+        }
+        return securedUser;
+    }
+
+    public static void assertSuperAdmin() {
+        if (!checkSuperAdmin()) {
+            thrower.throwPermissionFailed("Need to be SuperAdmin");
+        }
+    }
+
+    public static boolean checkSuperAdmin() {
+        UserPermissions allReferencePermissions = getUser().getUserPermissions();
+        return allReferencePermissions.isSuperAdmin();
+    }
+
+    public static void assertAdmin(SecuredByRef entity) {
+        if (!checkAdmin(entity)) {
+            thrower.throwPermissionFailed("Need to be Admin");
+        }
+    }
+
+    public static boolean checkAdmin(SecuredByRef entity) {
+        UserPermissions allReferencePermissions = getUser().getUserPermissions();
+        return allReferencePermissions.isSuperAdmin();
+    }
+
+
     public static void assertRole(SecuredRole role) {
         if (!checkRole(role)) {
             thrower.throwPermissionFailed("Need " + role);
@@ -61,7 +92,7 @@ public class SecurityContext {
     }
 
     public static boolean checkRole(SecuredRole role) {
-        UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
+        UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
         if (allReferencePermissions.isSuperAdmin()) {
             return true;
@@ -77,7 +108,7 @@ public class SecurityContext {
     }
 
     public static boolean checkRole(SecuredByRef entity, SecuredRole role) {
-        UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
+        UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
         if (allReferencePermissions.isSuperAdmin()) {
             return true;
@@ -123,7 +154,7 @@ public class SecurityContext {
     }
 
     public static boolean checkPrivilege(SecuredByRef entity, SecuredPrivilege privilege) {
-        UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
+        UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
         if (allReferencePermissions.isSuperAdmin()) {
             return true;
@@ -154,7 +185,7 @@ public class SecurityContext {
 
 	public static boolean checkPermissions(SecuredByRef entity, SecuredAction action) {
 
-		UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
+        UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
 		if (allReferencePermissions.isSuperAdmin()) {
 			return true;

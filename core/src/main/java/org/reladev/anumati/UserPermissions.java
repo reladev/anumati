@@ -1,5 +1,6 @@
 package org.reladev.anumati;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,13 +43,12 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
         return false;
     }
 
-    public void addRole(SecuredRole role) {
-        roles.add(role);
-
+    public void addRoles(SecuredRole... newRoles) {
+        this.roles.addAll(Arrays.asList(newRoles));
     }
 
-    public void removeRole(SecuredRole role) {
-        roles.remove(role);
+    public void removeRoles(SecuredRole... removeRoles) {
+        this.roles.removeAll(Arrays.asList(removeRoles));
     }
 
     ////////////////////////////////////////////////////////////////
@@ -68,13 +68,13 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
         return false;
     }
 
-    public void addPrivilege(SecuredPrivilege privilege) {
-        privileges.add(privilege);
+    public void addPrivileges(SecuredPrivilege... newPrivilege) {
+        privileges.addAll(Arrays.asList(newPrivilege));
 
     }
 
-    public void removePrivilege(SecuredPrivilege privilege) {
-        privileges.remove(privilege);
+    public void removePrivileges(SecuredPrivilege... removePrivileges) {
+        privileges.removeAll(Arrays.asList(removePrivileges));
     }
 
     ////////////////////////////////////////////////////////////////
@@ -100,9 +100,10 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 		referenceMap.put(referenceKey, privilegeMap);
 	}
 
-	public Iterator<UserReferencePermissions> iterator() {
-		return referenceMap.values().iterator();
-	}
+    @Override
+    public Iterator<UserReferencePermissions> iterator() {
+        return referenceMap.values().iterator();
+    }
 
 	public void remove(Object id, SecuredReferenceType type) {
 		referenceMap.remove(new ReferenceKey(id, type));

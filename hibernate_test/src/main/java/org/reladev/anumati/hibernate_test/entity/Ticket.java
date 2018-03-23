@@ -22,43 +22,45 @@ import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 @Entity
 public class Ticket extends SecuredEntity implements ProjectOwned {
     @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "object_id",
-		  referencedColumnName = "id",
-		  foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)) @Where(clause = "object_type=" + SecurityObjectType.TICKET_ORDINAL) private Set<SecurityReference> securityReferences = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "object_id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @Where(clause = "object_type=" + SecurityObjectType.TICKET_ORDINAL)
+    private Set<SecurityReference> securityReferences = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "parent_id", referencedColumnName = "id") @Where(clause = "parent_type=" + SecurityObjectType.TICKET_ORDINAL) private Set<ParentChildReference> childReferences = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @Where(clause = "parent_type=" + SecurityObjectType.TICKET_ORDINAL)
+    private Set<ParentChildReference> childReferences = new HashSet<>();
 
-	private String name;
+    private String name;
 
     public Ticket() {
         super(SecurityObjectType.TICKET);
     }
 
-	@Override
-	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
-		return securityReferences;
-	}
+    @Override
+    protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
+        return securityReferences;
+    }
 
-	@Override
-	protected Set<? extends SecuredParentChild> getChildReferencesForEdit() {
-		return childReferences;
-	}
+    @Override
+    protected Set<? extends SecuredParentChild> getChildReferencesForEdit() {
+        return childReferences;
+    }
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+    @Override
+    public Long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 }
