@@ -27,18 +27,14 @@ public class UserService {
 
         User user;
         if (userDto.getId() != null) {
-            SecurityContext.assertPrivilege(TicketsPrivilege.UserUpdate);
+            SecurityContext.assertPermission(TicketsPrivilege.UserUpdate);
             user = userRepository.get(userDto.getId());
         } else {
-            SecurityContext.assertPrivilege(TicketsPrivilege.UserCreate);
+            SecurityContext.assertPermission(TicketsPrivilege.UserCreate);
             user = new User();
-            user.setCompanyId(authUser.getCompanyId());
+            user.setCompany(authUser.getCompany());
         }
         userDto.copyTo(user);
-
-        if (!SecurityContext.checkSuperAdmin() && !authUser.getCompanyId().equals(user.getCompanyId())) {
-            SecurityContext.throwPermissionException("Invalid company permissions");
-        }
 
         userRepository.save(user);
 

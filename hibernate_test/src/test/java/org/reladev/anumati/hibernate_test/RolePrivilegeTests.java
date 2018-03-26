@@ -1,7 +1,5 @@
 package org.reladev.anumati.hibernate_test;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.reladev.anumati.AccessDeniedException;
@@ -15,6 +13,8 @@ import org.reladev.anumati.hibernate_test.security.SecurityPrivilege;
 import org.reladev.anumati.hibernate_test.security.SecurityRole;
 import org.reladev.anumati.hibernate_test.service.TicketService;
 
+import static org.junit.Assert.fail;
+
 public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
     TicketService service;
 
@@ -27,7 +27,7 @@ public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
     @Test
     public void testUserWithNoRoleFails() {
         try {
-            SecurityContext.assertRole(SecurityRole.MANAGER);
+            SecurityContext.assertPermission(SecurityRole.MANAGER);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
@@ -40,11 +40,11 @@ public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
 
         TestSecurityContext.addRoles(SecurityRole.MANAGER);
 
-        SecurityContext.assertRole(SecurityRole.MANAGER);
-        SecurityContext.assertRole(ticket, SecurityRole.MANAGER);
+        SecurityContext.assertPermission(SecurityRole.MANAGER);
+        SecurityContext.assertPermission(ticket, SecurityRole.MANAGER);
 
         try {
-            SecurityContext.assertRole(SecurityRole.MEMBER);
+            SecurityContext.assertPermission(SecurityRole.MEMBER);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
@@ -56,8 +56,8 @@ public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
         TestSecurityContext.addRoles(SecurityRole.MANAGER);
         TestSecurityContext.addRoles(SecurityRole.MEMBER);
 
-        SecurityContext.assertRole(SecurityRole.MANAGER);
-        SecurityContext.assertRole(SecurityRole.MEMBER);
+        SecurityContext.assertPermission(SecurityRole.MANAGER);
+        SecurityContext.assertPermission(SecurityRole.MEMBER);
     }
 
     @Test
@@ -68,19 +68,19 @@ public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
         TestSecurityContext.addRoles(project, SecurityRole.MANAGER);
 
         try {
-            SecurityContext.assertRole(SecurityRole.MANAGER);
+            SecurityContext.assertPermission(SecurityRole.MANAGER);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
 
-        SecurityContext.assertRole(ticket, SecurityRole.MANAGER);
+        SecurityContext.assertPermission(ticket, SecurityRole.MANAGER);
     }
 
 
     @Test
     public void testUserWithNoPrivilegesFails() {
         try {
-            SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+            SecurityContext.assertPermission(SecurityPrivilege.SOME_TASK);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
@@ -93,11 +93,11 @@ public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
 
         TestSecurityContext.addPrivileges(SecurityPrivilege.SOME_TASK);
 
-        SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
-        SecurityContext.assertPrivilege(ticket, SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPermission(SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPermission(ticket, SecurityPrivilege.SOME_TASK);
 
         try {
-            SecurityContext.assertPrivilege(SecurityPrivilege.RECOVER);
+            SecurityContext.assertPermission(SecurityPrivilege.RECOVER);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
@@ -109,8 +109,8 @@ public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
         TestSecurityContext.addPrivileges(SecurityPrivilege.SOME_TASK);
         TestSecurityContext.addPrivileges(SecurityPrivilege.RECOVER);
 
-        SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
-        SecurityContext.assertPrivilege(SecurityPrivilege.RECOVER);
+        SecurityContext.assertPermission(SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPermission(SecurityPrivilege.RECOVER);
     }
 
     @Test
@@ -121,12 +121,12 @@ public class RolePrivilegeTests extends JpaBaseRolledBackTestCase {
         TestSecurityContext.addPrivileges(project, SecurityPrivilege.SOME_TASK);
 
         try {
-            SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+            SecurityContext.assertPermission(SecurityPrivilege.SOME_TASK);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
 
-        SecurityContext.assertPrivilege(ticket, SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPermission(ticket, SecurityPrivilege.SOME_TASK);
     }
 
 

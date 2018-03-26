@@ -1,12 +1,8 @@
 package org.reladev.anumati.tickets.repository;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.reladev.anumati.SecurityContext;
-import org.reladev.anumati.tickets.entity.User;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Component;
 
@@ -37,13 +33,13 @@ public class BaseRepository<T> {
         }
     }
 
-    public List<T> findAll() {
-        Long companyId = ((User) SecurityContext.getUser()).getCompanyId();
-        String query = "SELECT e FROM " + typeClass.getSimpleName() + " e ";
-        if (companyId != null) {
-            query += "WHERE e.companyId = " + companyId;
-        }
-        return entityManager.createQuery(query, typeClass).getResultList();
-
-    }
+    //public List<T> findAll() {
+    //    Long companyId = ((User) SecurityContext.getUser()).getCompanyId();
+    //    String query = "SELECT e FROM " + typeClass.getSimpleName() + " e ";
+    //    if (companyId != null) {
+    //        query += "WHERE e.companyId = " + companyId;
+    //    }
+    //    return entityManager.createQuery(query, typeClass).getResultList();
+    //
+    //}
 }

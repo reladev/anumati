@@ -1,0 +1,10 @@
+mariadb:
+  image: mariadb:latest
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_DATABASE: tickets
+    MYSQL_USER: tickets
+    MYSQL_PASSWORD: password
+    MYSQL_ROOT_PASSWORD: root
+    TERM: dumb

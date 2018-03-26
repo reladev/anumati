@@ -86,8 +86,8 @@ abstract public class SecuredByRefEntity implements SecuredByRef {
 
 	@Override
 	public void removeSecuredReference(SecuredReferenceObject refObj) {
-		SecurityContext.assertPermissions(this, SecurityContext.getPermission());
-		SecuredReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
+        SecurityContext.assertPermission(this, SecurityContext.getPermission());
+        SecuredReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
 		Optional<SecuredReference> existingRef = getSecuredReferences().stream()
 			  .filter(r -> r.equals(ref))
 			  .findFirst();
@@ -105,8 +105,8 @@ abstract public class SecuredByRefEntity implements SecuredByRef {
 
 	@Override
 	public void setCheckRefOnly(boolean checkRefOnly) {
-		SecurityContext.assertPermissions(this, SecurityContext.getPermission());
-		this.checkRefOnly = checkRefOnly;
+        SecurityContext.assertPermission(this, SecurityContext.getPermission());
+        this.checkRefOnly = checkRefOnly;
 		cascadeAllNeeded = true;
 	}
 

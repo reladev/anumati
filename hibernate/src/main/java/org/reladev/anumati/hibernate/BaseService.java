@@ -34,8 +34,8 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 
 	public T get(Object id) {
 		T entity = repository.find(id);
-		SecurityContext.assertPermissions(entity, SecurityContext.getView());
-		return entity;
+        SecurityContext.assertPermission(entity, SecurityContext.getView());
+        return entity;
 	}
 
 	public List<T> getAll() {
@@ -48,12 +48,12 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 		T entity;
 		if (dto.getId() != null) {
 			entity = repository.find(dto.getId());
-			SecurityContext.assertPermissions(entity, SecurityContext.getEdit());
+            SecurityContext.assertPermission(entity, SecurityContext.getEdit());
 
 		} else {
 			entity = createNewInstance(dto, entityClass);
-			SecurityContext.assertPermissions(entity, SecurityContext.getCreate());
-		}
+            SecurityContext.assertPermission(entity, SecurityContext.getCreate());
+        }
 		T savedEntity = _save(dto, entity);
 		repository.flush();
 		updateReferences(savedEntity);
@@ -77,7 +77,7 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 	abstract protected T _save(D dto, T entity);
 
 	public void mergeReference(SecuredByRef entity, Collection ids, SecuredReferenceType referenceType, BaseRepository<? extends SecuredReferenceObject> repository) {
-		SecurityContext.assertPermissions(entity, SecurityContext.getPermission());
+        SecurityContext.assertPermission(entity, SecurityContext.getPermission());
 
 		Set<SecuredReference> refs = entity.getSecuredReferences();
 		SecuredObjectType objectType = entity.getSecuredObjectType();
@@ -90,8 +90,8 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 				toRemove.remove(ref);
 
 			} else {
-				SecurityContext.assertPermissions(referenceObject, SecurityContext.getView());
-				refs.add(ref);
+                SecurityContext.assertPermission(referenceObject, SecurityContext.getView());
+                refs.add(ref);
 			}
 		}
 		for (SecuredReference ref: toRemove) {
@@ -185,8 +185,8 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 			PageableList<T> result = fetchMethod.apply(runPointer, runSize);
 			int processedCount = 0;
 			for (T entity : result.getList()) {
-				if (SecurityContext.checkPermissions(entity, SecurityContext.getView())) {
-					completeList.add(entity);
+                if (SecurityContext.checkPermission(entity, SecurityContext.getView())) {
+                    completeList.add(entity);
 				}
 				processedCount++;
 				if (completeList.size() == pageSize) {

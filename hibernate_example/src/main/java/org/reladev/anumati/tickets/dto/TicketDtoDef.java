@@ -8,7 +8,6 @@ import org.reladev.quickdto.shared.QuickDto;
 public class TicketDtoDef {
     @CopyFromOnly
     Long id;
-    Long companyId;
 
     String title;
     String description;

@@ -8,7 +8,6 @@ import org.reladev.quickdto.shared.QuickDto;
 public class ProjectDtoDef {
     @CopyFromOnly
     Long id;
-    Long companyId;
 
     String name;
 }

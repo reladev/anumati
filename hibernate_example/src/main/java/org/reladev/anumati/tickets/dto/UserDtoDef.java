@@ -8,7 +8,6 @@ import org.reladev.quickdto.shared.QuickDto;
 public class UserDtoDef {
     @CopyFromOnly
     Long id;
-    Long companyId;
 
     String username;
 

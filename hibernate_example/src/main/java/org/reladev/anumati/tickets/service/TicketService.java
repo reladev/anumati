@@ -3,6 +3,7 @@ package org.reladev.anumati.tickets.service;
 import javax.inject.Inject;
 
 import org.reladev.anumati.SecurityContext;
+import org.reladev.anumati.tickets.TicketsAction;
 import org.reladev.anumati.tickets.TicketsPrivilege;
 import org.reladev.anumati.tickets.dto.TicketDto;
 import org.reladev.anumati.tickets.entity.Ticket;
@@ -23,23 +24,26 @@ public class TicketService {
         return dto;
     }
 
+    public Ticket get(Long id) {
+        Ticket ticket = ticketRepository.get(id);
+        SecurityContext.assertPermission(ticket, TicketsAction.READ);
+        return ticket;
+    }
+
     public Ticket updateCreate(TicketDto ticketDto) {
         User authUser = (User) SecurityContext.getUser();
 
         Ticket ticket;
         if (ticketDto.getId() != null) {
-            SecurityContext.assertPrivilege(TicketsPrivilege.TicketUpdate);
             ticket = ticketRepository.get(ticketDto.getId());
+            SecurityContext.assertPermission(ticket, TicketsAction.UPDATE);
         } else {
-            SecurityContext.assertPrivilege(TicketsPrivilege.TicketCreate);
+            SecurityContext.assertPermission(TicketsPrivilege.TicketCreate);
             ticket = new Ticket();
-            ticket.setCompanyId(authUser.getCompanyId());
+            ticket.setCompanyId(authUser.getCompany().getId());
+            SecurityContext.assertPermission(ticket, TicketsAction.CREATE);
         }
         ticketDto.copyTo(ticket);
-
-        if (SecurityContext.checkSuperAdmin() || authUser.getCompanyId().equals(ticket.getCompanyId())) {
-            SecurityContext.throwPermissionException("Invalid company permissions");
-        }
 
         ticketRepository.save(ticket);
 

@@ -28,18 +28,14 @@ public class ProjectService {
 
         Project project;
         if (projectDto.getId() != null) {
-            SecurityContext.assertPrivilege(TicketsPrivilege.ProjectUpdate);
+            SecurityContext.assertPermission(TicketsPrivilege.ProjectUpdate);
             project = projectRepository.get(projectDto.getId());
         } else {
-            SecurityContext.assertPrivilege(TicketsPrivilege.ProjectCreate);
+            SecurityContext.assertPermission(TicketsPrivilege.ProjectCreate);
             project = new Project();
-            project.setCompanyId(authUser.getCompanyId());
+            project.setCompany(authUser.getCompany());
         }
         projectDto.copyTo(project);
-
-        if (SecurityContext.checkSuperAdmin() || authUser.getCompanyId().equals(project.getCompanyId())) {
-            SecurityContext.throwPermissionException("Invalid company permissions");
-        }
 
         projectRepository.save(project);
 

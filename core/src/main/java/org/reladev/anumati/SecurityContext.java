@@ -85,13 +85,13 @@ public class SecurityContext {
     }
 
 
-    public static void assertRole(SecuredRole role) {
-        if (!checkRole(role)) {
+    public static void assertPermission(SecuredRole role) {
+        if (!checkPermission(role)) {
             thrower.throwPermissionFailed("Need " + role);
         }
     }
 
-    public static boolean checkRole(SecuredRole role) {
+    public static boolean checkPermission(SecuredRole role) {
         UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
         if (allReferencePermissions.isSuperAdmin()) {
@@ -101,13 +101,13 @@ public class SecurityContext {
         return allReferencePermissions.hasRole(role);
     }
 
-    public static void assertRole(SecuredByRef entity, SecuredRole role) {
-        if (!checkRole(entity, role)) {
+    public static void assertPermission(SecuredByRef entity, SecuredRole role) {
+        if (!checkPermission(entity, role)) {
             thrower.throwPermissionFailed("Need " + role);
         }
     }
 
-    public static boolean checkRole(SecuredByRef entity, SecuredRole role) {
+    public static boolean checkPermission(SecuredByRef entity, SecuredRole role) {
         UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
         if (allReferencePermissions.isSuperAdmin()) {
@@ -131,13 +131,13 @@ public class SecurityContext {
         return false;
     }
 
-    public static void assertPrivilege(SecuredPrivilege privilege) {
-        if (!checkPrivilege(privilege)) {
+    public static void assertPermission(SecuredPrivilege privilege) {
+        if (!checkPermission(privilege)) {
             thrower.throwPermissionFailed("Need " + privilege);
         }
     }
 
-    public static boolean checkPrivilege(SecuredPrivilege privilege) {
+    public static boolean checkPermission(SecuredPrivilege privilege) {
         UserPermissions allReferencePermissions = securedUserContext.getSecuredUser().getUserPermissions();
 
         if (allReferencePermissions.isSuperAdmin()) {
@@ -147,13 +147,13 @@ public class SecurityContext {
         return allReferencePermissions.hasPrivilege(privilege);
     }
 
-    public static void assertPrivilege(SecuredByRef entity, SecuredPrivilege privilege) {
-        if (!checkPrivilege(entity, privilege)) {
+    public static void assertPermission(SecuredByRef entity, SecuredPrivilege privilege) {
+        if (!checkPermission(entity, privilege)) {
             thrower.throwPermissionFailed("Need " + privilege);
         }
     }
 
-    public static boolean checkPrivilege(SecuredByRef entity, SecuredPrivilege privilege) {
+    public static boolean checkPermission(SecuredByRef entity, SecuredPrivilege privilege) {
         UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
         if (allReferencePermissions.isSuperAdmin()) {
@@ -177,13 +177,13 @@ public class SecurityContext {
         return false;
     }
 
-	public static void assertPermissions(SecuredByRef entity, SecuredAction action) {
-		if (!checkPermissions(entity, action)) {
-			thrower.throwPermissionFailed("Need " + action + " access for " + entity);
+    public static void assertPermission(SecuredByRef entity, SecuredAction action) {
+        if (!checkPermission(entity, action)) {
+            thrower.throwPermissionFailed("Need " + action + " access for " + entity);
 		}
 	}
 
-	public static boolean checkPermissions(SecuredByRef entity, SecuredAction action) {
+    public static boolean checkPermission(SecuredByRef entity, SecuredAction action) {
 
         UserPermissions allReferencePermissions = getUser().getUserPermissions();
 
@@ -223,8 +223,8 @@ public class SecurityContext {
 	public static <T extends SecuredByRef> List<T> filter(List<T> list, SecuredAction action) {
 		List<T> filteredList = new LinkedList<>();
 		for (T entity : list) {
-			if (SecurityContext.checkPermissions(entity, action)) {
-				filteredList.add(entity);
+            if (SecurityContext.checkPermission(entity, action)) {
+                filteredList.add(entity);
 			}
 		}
 

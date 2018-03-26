@@ -28,7 +28,7 @@ public class OverrideTests extends JpaBaseRolledBackTestCase {
 
         TestSecurityContext.setPermissions(project, SecurityObjectType.TICKET, SecurityAction.VIEW);
 
-        SecurityContext.assertPermissions(ticket, SecurityAction.VIEW);
+        SecurityContext.assertPermission(ticket, SecurityAction.VIEW);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class OverrideTests extends JpaBaseRolledBackTestCase {
 
         TestSecurityContext.setPermissions(project, SecurityObjectType.TICKET, SecurityAction.VIEW);
 
-        SecurityContext.assertPermissions(ticket, SecurityAction.VIEW);
+        SecurityContext.assertPermission(ticket, SecurityAction.VIEW);
     }
 
 }

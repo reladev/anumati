@@ -11,7 +11,6 @@ import org.reladev.quickdto.shared.QuickDto;
 public class RoleDtoDef {
     @CopyFromOnly
     Long id;
-    Long companyId;
 
     TicketsRole role;
     List<String> privileges;

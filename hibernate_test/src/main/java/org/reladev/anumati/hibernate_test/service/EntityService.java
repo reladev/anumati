@@ -51,7 +51,7 @@ abstract public class EntityService<T extends SecuredByRef, D extends IdDto> ext
                 } else {
                     project = UserContext.getUser().getDefaultProject();
                 }
-                SecurityContext.assertPermissions(project, SecurityAction.VIEW);
+                SecurityContext.assertPermission(project, SecurityAction.VIEW);
                 ((ProjectOwned) entity).setOwner(project);
 
 			} else if (entity instanceof CompanyOwned) {
@@ -62,8 +62,8 @@ abstract public class EntityService<T extends SecuredByRef, D extends IdDto> ext
 				} else {
 					company = UserContext.getUser().getCompany();
 				}
-				SecurityContext.assertPermissions(company, SecurityAction.VIEW);
-				((CompanyOwned) entity).setOwner(company);
+                SecurityContext.assertPermission(company, SecurityAction.VIEW);
+                ((CompanyOwned) entity).setOwner(company);
 			}
 			return entity;
 		} catch (IllegalAccessException | InstantiationException e) {

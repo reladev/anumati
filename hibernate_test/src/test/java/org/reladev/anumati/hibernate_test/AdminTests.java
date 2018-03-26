@@ -1,7 +1,5 @@
 package org.reladev.anumati.hibernate_test;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.reladev.anumati.AccessDeniedException;
@@ -15,6 +13,8 @@ import org.reladev.anumati.hibernate_test.security.SecurityAction;
 import org.reladev.anumati.hibernate_test.security.SecurityPrivilege;
 import org.reladev.anumati.hibernate_test.security.SecurityRole;
 import org.reladev.anumati.hibernate_test.service.TicketService;
+
+import static org.junit.Assert.fail;
 
 public class AdminTests extends JpaBaseRolledBackTestCase {
     TicketService service;
@@ -32,12 +32,12 @@ public class AdminTests extends JpaBaseRolledBackTestCase {
 
         TestSecurityContext.setSuperAdmin(true);
 
-        SecurityContext.assertRole(SecurityRole.MANAGER);
-        SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPermission(SecurityRole.MANAGER);
+        SecurityContext.assertPermission(SecurityPrivilege.SOME_TASK);
 
-        SecurityContext.assertRole(ticket, SecurityRole.MANAGER);
-        SecurityContext.assertPrivilege(ticket, SecurityPrivilege.SOME_TASK);
-        SecurityContext.assertPermissions(ticket, SecurityAction.PERMISSIONS);
+        SecurityContext.assertPermission(ticket, SecurityRole.MANAGER);
+        SecurityContext.assertPermission(ticket, SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPermission(ticket, SecurityAction.PERMISSIONS);
     }
 
     @Test
@@ -49,18 +49,18 @@ public class AdminTests extends JpaBaseRolledBackTestCase {
 
 
         try {
-            SecurityContext.assertRole(SecurityRole.MANAGER);
+            SecurityContext.assertPermission(SecurityRole.MANAGER);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
         try {
-            SecurityContext.assertPrivilege(SecurityPrivilege.SOME_TASK);
+            SecurityContext.assertPermission(SecurityPrivilege.SOME_TASK);
             fail("Excepted AccessDeniedException");
         } catch (AccessDeniedException ignore) {
         }
 
-        SecurityContext.assertRole(ticket, SecurityRole.MANAGER);
-        SecurityContext.assertPrivilege(ticket, SecurityPrivilege.SOME_TASK);
-        SecurityContext.assertPermissions(ticket, SecurityAction.PERMISSIONS);
+        SecurityContext.assertPermission(ticket, SecurityRole.MANAGER);
+        SecurityContext.assertPermission(ticket, SecurityPrivilege.SOME_TASK);
+        SecurityContext.assertPermission(ticket, SecurityAction.PERMISSIONS);
     }
 }
