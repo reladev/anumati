@@ -26,6 +26,7 @@ public class Company extends SecuredEntity implements SecuredReferenceObject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "object_id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @Where(clause = "object_type=" + SecurityObjectType.COMPANY_ORDINAL)
