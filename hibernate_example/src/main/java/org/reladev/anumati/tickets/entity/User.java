@@ -23,6 +23,7 @@ import org.reladev.anumati.SecuredReferenceObject;
 import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.SecuredUser;
 import org.reladev.anumati.UserPermissions;
+import org.reladev.anumati.tickets.TicketsRole;
 import org.reladev.anumati.tickets.auth.SecurityObjectType;
 import org.reladev.anumati.tickets.auth.SecurityReferenceType;
 
@@ -55,6 +56,13 @@ public class User extends SecuredEntity implements SecuredUser, SecuredReference
 
     public User() {
         super(SecurityObjectType.USER);
+    }
+
+    public User(Company company, String username, String password, TicketsRole role) {
+        this();
+        this.company = company;
+        this.username = username;
+        this.password = password;
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.reladev.anumati.SecuredRole;
 
 public enum TicketsRole implements SecuredRole {
     ADMIN,
+    MANAGER,
     DEVELOPER,
     EMPLOYEE
 }

@@ -8,6 +8,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -38,6 +40,7 @@ public class Role extends SecuredEntity {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @Enumerated(EnumType.STRING)
     private TicketsRole role;
 
     @SuppressWarnings("JpaAttributeTypeInspection")
@@ -46,6 +49,13 @@ public class Role extends SecuredEntity {
 
     public Role() {
         super(SecurityObjectType.ROLE);
+    }
+
+    public Role(Company company, TicketsRole role, List<String> privileges) {
+        this();
+        this.company = company;
+        this.role = role;
+        this.privileges = privileges;
     }
 
     public Long getId() {

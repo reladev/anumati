@@ -35,7 +35,11 @@ public class Company extends SecuredEntity implements SecuredReferenceObject {
 
     public Company() {
         super(SecurityObjectType.COMPANY);
-        this.securityReferences = securityReferences;
+    }
+
+    public Company(String name) {
+        this();
+        this.name = name;
     }
 
     /*test*/ Company(Long id) {
