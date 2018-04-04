@@ -1,10 +1,10 @@
 package org.reladev.anumati.hibernate_test.security;
 
-import org.reladev.anumati.SecuredRole;
+import org.reladev.anumati.AuthRole;
 
 
-public enum SecurityRole implements SecuredRole {
+public enum SecurityRole implements AuthRole {
     MANAGER,
-    MEMBER;
+    MEMBER
 
 }

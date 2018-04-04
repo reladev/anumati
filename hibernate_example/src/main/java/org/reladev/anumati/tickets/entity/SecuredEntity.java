@@ -2,9 +2,9 @@ package org.reladev.anumati.tickets.entity;
 
 import java.util.Objects;
 
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.SecuredObjectType;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.hibernate.SecuredByRefEntity;
 
 abstract public class SecuredEntity extends SecuredByRefEntity {
@@ -13,7 +13,7 @@ abstract public class SecuredEntity extends SecuredByRefEntity {
     }
 
     @Override
-    protected SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType) {
+    protected AuthReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, AuthReferenceType referenceType) {
         return new SecurityReference(objectId, objectType, referenceId, referenceType);
     }
 

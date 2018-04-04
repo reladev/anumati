@@ -10,5 +10,5 @@ public interface AuthPermissions {
 
     Set<String> getPrivileges();
 
-    Set<SecuredRole> getRoles();
+    Set<AuthRole> getRoles();
 }

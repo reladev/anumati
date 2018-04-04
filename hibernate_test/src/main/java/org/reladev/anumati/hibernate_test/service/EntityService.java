@@ -1,10 +1,10 @@
 package org.reladev.anumati.hibernate_test.service;
 
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredParentChild;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.hibernate.BaseService;
 import org.reladev.anumati.hibernate.IdDto;
@@ -35,9 +35,9 @@ abstract public class EntityService<T extends SecuredByRef, D extends IdDto> ext
 	 }
 
 	 @Override
-	 public SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType) {
-		 return new SecurityReference(objectId, objectType, referenceId, referenceType);
-	 }
+     public AuthReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, AuthReferenceType referenceType) {
+         return new SecurityReference(objectId, objectType, referenceId, referenceType);
+     }
 
 	 @Override
 	public T createNewInstance(D dto, Class<T> entityClass) {

@@ -9,7 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.reladev.anumati.SecuredAction;
+import org.reladev.anumati.AuthAction;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredParentChild;
@@ -66,9 +66,9 @@ abstract public class BaseRepository<T extends SecuredByRef> {
 		return entity;
 	}
 
-	public SecuredQueryBuilder buildQuery(SecuredAction action) {
-		return new SecuredQueryBuilder<>(entityManager, entityClass, objectType, action);
-	}
+    public SecuredQueryBuilder buildQuery(AuthAction action) {
+        return new SecuredQueryBuilder<>(entityManager, entityClass, objectType, action);
+    }
 
 	public void flush() {
 		entityManager.flush();

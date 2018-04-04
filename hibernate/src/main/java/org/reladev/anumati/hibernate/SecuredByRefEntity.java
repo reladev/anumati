@@ -8,13 +8,13 @@ import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.MappedSuperclass;
 
-import org.reladev.anumati.SecuredAction;
+import org.reladev.anumati.AuthAction;
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceObject;
+import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredParentChild;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.SecurityContext;
 
 @MappedSuperclass
@@ -30,9 +30,9 @@ abstract public class SecuredByRefEntity implements SecuredByRef {
 		this.type = type;
 	}
 
-	abstract protected SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType);
+    abstract protected AuthReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, AuthReferenceType referenceType);
 
-	abstract protected Set<? extends SecuredReference> getSecuredReferencesForEdit();
+    abstract protected Set<? extends AuthReference> getSecuredReferencesForEdit();
 
 	protected Set<? extends SecuredParentChild> getChildReferencesForEdit() {
 		return Collections.emptySet();
@@ -47,27 +47,27 @@ abstract public class SecuredByRefEntity implements SecuredByRef {
 	}
 
 	@Override
-	public Set<SecuredReference> getSecuredReferences() {
-		return Collections.unmodifiableSet(getSecuredReferencesForEdit());
-	}
+    public Set<AuthReference> getSecuredReferences() {
+        return Collections.unmodifiableSet(getSecuredReferencesForEdit());
+    }
 
 	@Override
-	public void addSecuredReference(SecuredReferenceObject refObj, boolean owner, SecuredAction... actions) {
-		// Todo clean test to allow this to work
-		//UserContext.assertPermissions(getThis(), SecurityAction.PERMISSIONS);
-		SecuredReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
-		ref.setOwner(owner);
-		ref.setAllowedActions(actions);
-		Set securedReferencesForEdit = getSecuredReferencesForEdit();
+    public void addSecuredReference(AuthReferenceObject refObj, boolean owner, AuthAction... actions) {
+        // Todo clean test to allow this to work
+        //UserContext.assertPermissions(getThis(), SecurityAction.PERMISSIONS);
+        AuthReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
+        ref.setOwner(owner);
+        ref.setAllowedActions(actions);
+        Set securedReferencesForEdit = getSecuredReferencesForEdit();
 		securedReferencesForEdit.remove(ref);
 		securedReferencesForEdit.add(ref);
 
 		if (owner) {
-			for (SecuredReferenceObject included : refObj.getIncludedReferenceObjects()) {
-				SecuredReference includedRef = createSecuredReference(getId(), getSecuredObjectType(), included.getId(), included.getSecuredReferenceType());
-				includedRef.setOwner(true);
-				includedRef.setAllowedActions(actions);
-				securedReferencesForEdit.remove(includedRef);
+            for (AuthReferenceObject included : refObj.getIncludedReferenceObjects()) {
+                AuthReference includedRef = createSecuredReference(getId(), getSecuredObjectType(), included.getId(), included.getSecuredReferenceType());
+                includedRef.setOwner(true);
+                includedRef.setAllowedActions(actions);
+                securedReferencesForEdit.remove(includedRef);
 				securedReferencesForEdit.add(includedRef);
 			}
 		}
@@ -75,23 +75,21 @@ abstract public class SecuredByRefEntity implements SecuredByRef {
 	}
 
 	@Override
-	public void addSecuredReference(SecuredReference ref) {
-		SecuredReference newRef = createSecuredReference(this.getId(), this.getSecuredObjectType(), ref.getReferenceId(), ref.getReferenceType());
-		Set securedReferencesForEdit = getSecuredReferencesForEdit();
-		securedReferencesForEdit.remove(newRef);
-		securedReferencesForEdit.add(newRef);
+    public void addSecuredReference(AuthReference ref) {
+        AuthReference newRef = createSecuredReference(this.getId(), this.getSecuredObjectType(), ref.getReferenceId(), ref.getReferenceType());
+        Set securedReferencesForEdit = getSecuredReferencesForEdit();
+        securedReferencesForEdit.remove(newRef);
+        securedReferencesForEdit.add(newRef);
 	}
 
 
 
 	@Override
-	public void removeSecuredReference(SecuredReferenceObject refObj) {
+    public void removeSecuredReference(AuthReferenceObject refObj) {
         SecurityContext.assertPermission(this, SecurityContext.getPermission());
-        SecuredReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
-		Optional<SecuredReference> existingRef = getSecuredReferences().stream()
-			  .filter(r -> r.equals(ref))
-			  .findFirst();
-		if (existingRef.isPresent() && existingRef.get().isOwner()) {
+        AuthReference ref = createSecuredReference(getId(), getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
+        Optional<AuthReference> existingRef = getSecuredReferences().stream().filter(r -> r.equals(ref)).findFirst();
+        if (existingRef.isPresent() && existingRef.get().isOwner()) {
 			SecurityContext.throwPermissionException("Can't remove owner");
 		}
 		getSecuredReferencesForEdit().remove(ref);
@@ -137,16 +135,16 @@ abstract public class SecuredByRefEntity implements SecuredByRef {
 	}
 
 
-	public void setOwner(SecuredReferenceObject refObj) {
-		addSecuredReference(refObj, true);
-	}
+    public void setOwner(AuthReferenceObject refObj) {
+        addSecuredReference(refObj, true);
+    }
 
-	public Set getReferenceIds(SecuredReferenceType referenceType) {
-		HashSet<Object> ids = new HashSet<>();
-		for (SecuredReference ref: getSecuredReferences()) {
-			if (ref.getReferenceType() == referenceType) {
-				ids.add(ref.getReferenceId());
-			}
+    public Set getReferenceIds(AuthReferenceType referenceType) {
+        HashSet<Object> ids = new HashSet<>();
+        for (AuthReference ref : getSecuredReferences()) {
+            if (ref.getReferenceType() == referenceType) {
+                ids.add(ref.getReferenceId());
+            }
 		}
 		return ids;
 	}

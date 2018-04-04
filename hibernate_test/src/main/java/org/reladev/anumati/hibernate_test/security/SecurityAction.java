@@ -2,13 +2,13 @@ package org.reladev.anumati.hibernate_test.security;
 
 import java.security.InvalidParameterException;
 
-import org.reladev.anumati.SecuredAction;
+import org.reladev.anumati.AuthAction;
 
 
-public enum SecurityAction implements SecuredAction {
-	VIEW('V'),
-	EDIT('E'),
-	CREATE('C'),
+public enum SecurityAction implements AuthAction {
+    VIEW('V'),
+    EDIT('E'),
+    CREATE('C'),
 	DELETE('D'),
 	PERMISSIONS('P');
 

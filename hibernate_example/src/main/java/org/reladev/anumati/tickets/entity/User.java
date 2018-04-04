@@ -18,17 +18,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
-import org.reladev.anumati.SecuredUser;
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceObject;
+import org.reladev.anumati.AuthReferenceType;
+import org.reladev.anumati.AuthUser;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.tickets.TicketsRole;
 import org.reladev.anumati.tickets.auth.SecurityObjectType;
 import org.reladev.anumati.tickets.auth.SecurityReferenceType;
 
 @Entity
-public class User extends SecuredEntity implements SecuredUser, SecuredReferenceObject {
+public class User extends SecuredEntity implements AuthUser, AuthReferenceObject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -77,12 +77,12 @@ public class User extends SecuredEntity implements SecuredUser, SecuredReference
     }
 
     @Override
-    public SecuredReferenceType getSecuredReferenceType() {
+    public AuthReferenceType getSecuredReferenceType() {
         return SecurityReferenceType.USER;
     }
 
     @Override
-    protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
+    protected Set<? extends AuthReference> getSecuredReferencesForEdit() {
         return securityReferences;
     }
 

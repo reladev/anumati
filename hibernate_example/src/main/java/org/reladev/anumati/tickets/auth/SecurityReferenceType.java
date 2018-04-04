@@ -1,8 +1,8 @@
 package org.reladev.anumati.tickets.auth;
 
-import org.reladev.anumati.SecuredReferenceType;
+import org.reladev.anumati.AuthReferenceType;
 
-public enum SecurityReferenceType implements SecuredReferenceType {
+public enum SecurityReferenceType implements AuthReferenceType {
     COMPANY,
     PROJECT,
     USER(true);

@@ -1,8 +1,8 @@
 package org.reladev.anumati.hibernate_test.security;
 
 
-import org.reladev.anumati.SecuredReferenceObject;
+import org.reladev.anumati.AuthReferenceObject;
 
 public interface CompanyOwned {
-	void setOwner(SecuredReferenceObject owner);
+    void setOwner(AuthReferenceObject owner);
 }

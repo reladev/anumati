@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.mockito.Mockito;
-import org.reladev.anumati.SecuredAction;
-import org.reladev.anumati.SecuredActionsSet;
+import org.reladev.anumati.AuthAction;
+import org.reladev.anumati.AuthActionSet;
+import org.reladev.anumati.AuthPrivilege;
+import org.reladev.anumati.AuthReferenceObject;
+import org.reladev.anumati.AuthReferenceType;
+import org.reladev.anumati.AuthRole;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
-import org.reladev.anumati.SecuredPrivilege;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
-import org.reladev.anumati.SecuredRole;
 import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.UserReferencePermissions;
@@ -54,7 +54,7 @@ public class TestSecurityContext {
 		userPermissions.setSuperAdmin(superAdmin);
 	}
 
-    public static void setAdminPermissions(SecuredReferenceObject refObj, boolean admin) {
+    public static void setAdminPermissions(AuthReferenceObject refObj, boolean admin) {
         UserReferencePermissions permissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
         permissions.setAdmin(admin);
     }
@@ -63,16 +63,16 @@ public class TestSecurityContext {
     //  Role Methods
     ////////////////////////////////////////////////////////////////
 
-    public static void addRoles(SecuredRole... roles) {
-        for (SecuredRole role : roles) {
+    public static void addRoles(AuthRole... roles) {
+        for (AuthRole role : roles) {
             userPermissions.addRoles(role);
         }
 
     }
 
-    public static void addRoles(SecuredReferenceObject refObj, SecuredRole... roles) {
+    public static void addRoles(AuthReferenceObject refObj, AuthRole... roles) {
         UserReferencePermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
-        for (SecuredRole role : roles) {
+        for (AuthRole role : roles) {
             refPermissions.addRole(role);
         }
     }
@@ -81,16 +81,16 @@ public class TestSecurityContext {
     //  Privilege Methods
     ////////////////////////////////////////////////////////////////
 
-    public static void addPrivileges(SecuredPrivilege... privileges) {
-        for (SecuredPrivilege privilege : privileges) {
+    public static void addPrivileges(AuthPrivilege... privileges) {
+        for (AuthPrivilege privilege : privileges) {
             userPermissions.addPrivileges(privilege);
         }
 
     }
 
-    public static void addPrivileges(SecuredReferenceObject refObj, SecuredPrivilege... privileges) {
+    public static void addPrivileges(AuthReferenceObject refObj, AuthPrivilege... privileges) {
         UserReferencePermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
-        for (SecuredPrivilege privilege : privileges) {
+        for (AuthPrivilege privilege : privileges) {
             refPermissions.addPrivilege(privilege);
         }
     }
@@ -99,34 +99,34 @@ public class TestSecurityContext {
     //  Role Methods
     ////////////////////////////////////////////////////////////////
 
-	public static void setPermissions(SecuredReferenceObject refObj, SecuredObjectType type, SecuredAction... actions) {
-		UserReferencePermissions permissions = new UserReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType());
-		permissions.setAllowedActions(type, new SecuredActionsSet(actions));
-		userPermissions.put(permissions);
-	}
+    public static void setPermissions(AuthReferenceObject refObj, SecuredObjectType type, AuthAction... actions) {
+        UserReferencePermissions permissions = new UserReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType());
+        permissions.setAllowedActions(type, new AuthActionSet(actions));
+        userPermissions.put(permissions);
+    }
 
-	public static void setPermissions(SecuredReferenceObject refObj, String... permissions) {
-		userPermissions.put(createReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType(), Arrays.asList(permissions)));
-	}
+    public static void setPermissions(AuthReferenceObject refObj, String... permissions) {
+        userPermissions.put(createReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType(), Arrays.asList(permissions)));
+    }
 
-	public static void removePermissions(SecuredReferenceObject refObj) {
-		userPermissions.remove(refObj.getId(), refObj.getSecuredReferenceType());
-	}
+    public static void removePermissions(AuthReferenceObject refObj) {
+        userPermissions.remove(refObj.getId(), refObj.getSecuredReferenceType());
+    }
 
 	public static void setCompanyPermissions(String... permissions) {
 		setPermissions(UserContext.getUser().getCompany(), permissions);
 	}
 
-	public static void addRef(SecuredByRef entity, SecuredReferenceObject refObj, SecuredAction... actions) {
-		setSuperAdmin(true);
-		entity.addSecuredReference(refObj, false, actions);
-		setSuperAdmin(false);
+    public static void addRef(SecuredByRef entity, AuthReferenceObject refObj, AuthAction... actions) {
+        setSuperAdmin(true);
+        entity.addSecuredReference(refObj, false, actions);
+        setSuperAdmin(false);
 	}
 
-	public static void removeRef(SecuredByRef entity, SecuredReferenceObject refObj) {
-		setSuperAdmin(true);
-		entity.removeSecuredReference(refObj);
-		setSuperAdmin(false);
+    public static void removeRef(SecuredByRef entity, AuthReferenceObject refObj) {
+        setSuperAdmin(true);
+        entity.removeSecuredReference(refObj);
+        setSuperAdmin(false);
 	}
 
 	public static void setCheckRefOnly(SecuredByRef entity, boolean refOnly) {
@@ -135,18 +135,18 @@ public class TestSecurityContext {
 		setSuperAdmin(false);
 	}
 
-	public static UserReferencePermissions createReferencePermissions(Object referenceId, SecuredReferenceType referenceType, Collection<String> permissionsList) {
-		UserReferencePermissions referencePrivileges = new UserReferencePermissions(referenceId, referenceType);
-		for (String permissions: permissionsList) {
-			try {
+    public static UserReferencePermissions createReferencePermissions(Object referenceId, AuthReferenceType referenceType, Collection<String> permissionsList) {
+        UserReferencePermissions referencePrivileges = new UserReferencePermissions(referenceId, referenceType);
+        for (String permissions : permissionsList) {
+            try {
 				String[] parts = permissions.split("_");
 				SecuredObjectType objectType = SecurityObjectType.valueOf(parts[0]);
-				SecuredActionsSet actionsSet = new SecuredActionsSet();
-				for (char actionChar : parts[1].toCharArray()) {
-					SecuredAction action = SecurityAction.valueOfAbbreviation(actionChar);
-					actionsSet.add(action);
-				}
-				referencePrivileges.mergePermissions(objectType, actionsSet);
+                AuthActionSet actionsSet = new AuthActionSet();
+                for (char actionChar : parts[1].toCharArray()) {
+                    AuthAction action = SecurityAction.valueOfAbbreviation(actionChar);
+                    actionsSet.add(action);
+                }
+                referencePrivileges.mergePermissions(objectType, actionsSet);
 			} catch(Exception e) {
 				throw new IllegalStateException("Bad privilege(should be in the format of ENTITY_VECP) - probably old security model :" + permissions
 														+ " " + e.getMessage());

@@ -1,6 +1,6 @@
 package org.reladev.anumati.article;
 
-import org.reladev.anumati.SecuredAction;
+import org.reladev.anumati.AuthAction;
 import org.reladev.anumati.SecuredByRef;
 
 public class SecurityContext {
@@ -16,10 +16,10 @@ public class SecurityContext {
 
     }
 
-    public static void assertPermissions(SecuredByRef entity, SecuredAction action) {
+    public static void assertPermissions(SecuredByRef entity, AuthAction action) {
     }
 
-    public static boolean checkPermissions(SecuredByRef entity, SecuredAction action) {
+    public static boolean checkPermissions(SecuredByRef entity, AuthAction action) {
         //...
         return true;
     }

@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import org.reladev.anumati.AuthActionSet;
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceObject;
+import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.PageableList;
-import org.reladev.anumati.SecuredActionsSet;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredParentChild;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.SecurityContext;
 
 
@@ -29,8 +29,10 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 	}
 
 	abstract public T createNewInstance(D dto, Class<T> entityClass);
-	abstract public SecuredReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType);
-	abstract public Class<? extends SecuredParentChild> getSecuredParentChildClass();
+
+    abstract public AuthReference createSecuredReference(Object objectId, SecuredObjectType objectType, Object referenceId, AuthReferenceType referenceType);
+
+    abstract public Class<? extends SecuredParentChild> getSecuredParentChildClass();
 
 	public T get(Object id) {
 		T entity = repository.find(id);
@@ -62,10 +64,10 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 	}
 
 	private void updateReferences(SecuredByRef savedEntity) {
-		for (SecuredReference ref: savedEntity.getSecuredReferences()) {
-			if (ref.getObjectId() == null) {
-				ref.setObjectId(savedEntity.getId());
-			}
+        for (AuthReference ref : savedEntity.getSecuredReferences()) {
+            if (ref.getObjectId() == null) {
+                ref.setObjectId(savedEntity.getId());
+            }
 		}
 		for (SecuredParentChild ref: savedEntity.getChildReferences()) {
 			if (ref.getParentId() == null) {
@@ -76,15 +78,15 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 
 	abstract protected T _save(D dto, T entity);
 
-	public void mergeReference(SecuredByRef entity, Collection ids, SecuredReferenceType referenceType, BaseRepository<? extends SecuredReferenceObject> repository) {
+    public void mergeReference(SecuredByRef entity, Collection ids, AuthReferenceType referenceType, BaseRepository<? extends AuthReferenceObject> repository) {
         SecurityContext.assertPermission(entity, SecurityContext.getPermission());
 
-		Set<SecuredReference> refs = entity.getSecuredReferences();
-		SecuredObjectType objectType = entity.getSecuredObjectType();
-		List<SecuredReference> toRemove = new ArrayList<>(refs);
-		for (Object id: ids) {
-			SecuredReferenceObject referenceObject = repository.find(id);
-			SecuredReference ref = createSecuredReference(entity.getId(), objectType, referenceObject.getId(), referenceObject.getSecuredReferenceType());
+        Set<AuthReference> refs = entity.getSecuredReferences();
+        SecuredObjectType objectType = entity.getSecuredObjectType();
+        List<AuthReference> toRemove = new ArrayList<>(refs);
+        for (Object id : ids) {
+            AuthReferenceObject referenceObject = repository.find(id);
+            AuthReference ref = createSecuredReference(entity.getId(), objectType, referenceObject.getId(), referenceObject.getSecuredReferenceType());
 
 			if (refs.contains(ref)) {
 				toRemove.remove(ref);
@@ -94,10 +96,10 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
                 refs.add(ref);
 			}
 		}
-		for (SecuredReference ref: toRemove) {
-			if (!ref.isOwner()) {
-				refs.remove(ref);
-			}
+        for (AuthReference ref : toRemove) {
+            if (!ref.isOwner()) {
+                refs.remove(ref);
+            }
 		}
 
 	}
@@ -121,34 +123,34 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 	}
 
 	public void cascadeToChild(Object childId, SecuredObjectType childType) {
-		Set<SecuredReference> mergedSecurityRefs = new HashSet<>();
+        Set<AuthReference> mergedSecurityRefs = new HashSet<>();
 
 		SecuredByRef child = repository.getReferenceObject(childId, childType);
-		for (SecuredReference ref : child.getSecuredReferences()) {
-			if (ref.isFixed()) {
-				mergedSecurityRefs.add(ref);
-			}
+        for (AuthReference ref : child.getSecuredReferences()) {
+            if (ref.isFixed()) {
+                mergedSecurityRefs.add(ref);
+            }
 		}
 
 
 		List<? extends SecuredParentChild> parentRefs = repository.getParentReferences(childId, childType, getSecuredParentChildClass());
 		for (SecuredParentChild parentRef : parentRefs) {
 			SecuredByRef parent = repository.getReferenceObject(parentRef.getParentId(), parentRef.getParentType());
-			Set<SecuredReference> parentSecurityRefs = parent.getSecuredReferences();
-			mergeSecurityReferences(mergedSecurityRefs, parentSecurityRefs);
-		}
-		for (SecuredReference ref : mergedSecurityRefs) {
-			child.addSecuredReference(ref);
-		}
-	}
+            Set<AuthReference> parentSecurityRefs = parent.getSecuredReferences();
+            mergeSecurityReferences(mergedSecurityRefs, parentSecurityRefs);
+        }
+        for (AuthReference ref : mergedSecurityRefs) {
+            child.addSecuredReference(ref);
+        }
+    }
 
-	private void mergeSecurityReferences(Set<SecuredReference> dest, Set<SecuredReference> source) {
-		for (SecuredReference ref: source) {
-			boolean merged = false;
-			for (SecuredReference mergeRef: dest) {
-				if (mergeRef.equals(ref)) {
-					if (!mergeRef.isFixed()) {
-						merge(mergeRef, ref);
+    private void mergeSecurityReferences(Set<AuthReference> dest, Set<AuthReference> source) {
+        for (AuthReference ref : source) {
+            boolean merged = false;
+            for (AuthReference mergeRef : dest) {
+                if (mergeRef.equals(ref)) {
+                    if (!mergeRef.isFixed()) {
+                        merge(mergeRef, ref);
 						merged = true;
 					}
 					break;
@@ -160,17 +162,17 @@ abstract public class BaseService<T extends SecuredByRef, D extends IdDto> {
 		}
 	}
 
-	public void merge(SecuredReference into, SecuredReference ref) {
-		into.setOwner(into.isOwner() || ref.isOwner());
+    public void merge(AuthReference into, AuthReference ref) {
+        into.setOwner(into.isOwner() || ref.isOwner());
 
 		if (into.getAllowedActions() == null || ref.getAllowedActions() == null) {
-			into.setAllowedActions((SecuredActionsSet)null);
+            into.setAllowedActions((AuthActionSet) null);
 
 		} else {
-			SecuredActionsSet allowedActions = into.getAllowedActions();
-			allowedActions.merge(ref.getAllowedActions());
-		}
-	}
+            AuthActionSet allowedActions = into.getAllowedActions();
+            allowedActions.merge(ref.getAllowedActions());
+        }
+    }
 
 
     public PageableList<T> filterPageable(Integer pagePointer, int pageSize, BiFunction<Integer, Integer, PageableList<T>> fetchMethod) {

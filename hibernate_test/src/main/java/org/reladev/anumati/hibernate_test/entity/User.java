@@ -18,19 +18,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
-import org.reladev.anumati.SecuredUser;
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceObject;
+import org.reladev.anumati.AuthReferenceType;
+import org.reladev.anumati.AuthUser;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class User extends SecuredEntity implements SecuredUser, SecuredReferenceObject {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class User extends SecuredEntity implements AuthUser, AuthReferenceObject {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "object_id",
@@ -67,14 +67,14 @@ public class User extends SecuredEntity implements SecuredUser, SecuredReference
 	}
 
 	@Override
-	public SecuredReferenceType getSecuredReferenceType() {
-		return SecurityReferenceType.USER;
-	}
+    public AuthReferenceType getSecuredReferenceType() {
+        return SecurityReferenceType.USER;
+    }
 
 	@Override
-	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
-		return securityReferences;
-	}
+    protected Set<? extends AuthReference> getSecuredReferencesForEdit() {
+        return securityReferences;
+    }
 
 	public Company getCompany() {
 		return company;

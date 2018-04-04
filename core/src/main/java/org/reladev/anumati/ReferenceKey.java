@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class ReferenceKey {
     Object id;
-    SecuredReferenceType type;
+    AuthReferenceType type;
 
-    public ReferenceKey(Object id, SecuredReferenceType type) {
+    public ReferenceKey(Object id, AuthReferenceType type) {
         this.id = id;
         this.type = type;
     }

@@ -8,18 +8,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.Formula;
-import org.reladev.anumati.SecuredAction;
-import org.reladev.anumati.SecuredActionsSet;
+import org.reladev.anumati.AuthAction;
+import org.reladev.anumati.AuthActionSet;
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceObject;
+import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class SecurityReference implements SecuredReference {
+public class SecurityReference implements AuthReference {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,14 +39,14 @@ public class SecurityReference implements SecuredReference {
 	protected SecurityReference() {
 	}
 
-	public SecurityReference(SecuredByRef object, SecuredReferenceObject refObj) {
-		this(object.getId(), object.getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
-	}
+    public SecurityReference(SecuredByRef object, AuthReferenceObject refObj) {
+        this(object.getId(), object.getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
+    }
 
-	public SecurityReference(Object objectId, SecuredObjectType objectType, Object referenceId, SecuredReferenceType referenceType) {
-		if (referenceId == null) {
-			throw new NullPointerException("referenceId");
-		}
+    public SecurityReference(Object objectId, SecuredObjectType objectType, Object referenceId, AuthReferenceType referenceType) {
+        if (referenceId == null) {
+            throw new NullPointerException("referenceId");
+        }
 		this.objectId = (Long) objectId;
 		this.objectType = (SecurityObjectType) objectType;
 		this.referenceId = (Long) referenceId;
@@ -89,35 +89,35 @@ public class SecurityReference implements SecuredReference {
 		this.referenceType = referenceType;
 	}
 
-	public SecuredActionsSet getAllowedActions() {
-		if (actionFlags == null) {
-			return null;
+    public AuthActionSet getAllowedActions() {
+        if (actionFlags == null) {
+            return null;
 
 		} else {
-			return new SecuredActionsSet(actionFlags);
-		}
-	}
+            return new AuthActionSet(actionFlags);
+        }
+    }
 
 	public void setActionFlags(Long actionFlags) {
 		this.actionFlags = actionFlags;
 	}
 
 	@Override
-	public void setAllowedActions(SecuredActionsSet actions) {
-		actionFlags = actions.getFlags();
-	}
+    public void setAllowedActions(AuthActionSet actions) {
+        actionFlags = actions.getFlags();
+    }
 
 	@Override
-	public void setAllowedActions(SecuredAction... actions) {
-		if (actions.length == 0) {
-			actionFlags = null;
+    public void setAllowedActions(AuthAction... actions) {
+        if (actions.length == 0) {
+            actionFlags = null;
 
 		} else {
-			SecuredActionsSet actionsSet = new SecuredActionsSet();
-			for (SecuredAction action : actions) {
-				actionsSet.add(action);
-			}
-			actionFlags = actionsSet.getFlags();
+            AuthActionSet actionsSet = new AuthActionSet();
+            for (AuthAction action : actions) {
+                actionsSet.add(action);
+            }
+            actionFlags = actionsSet.getFlags();
 		}
 	}
 

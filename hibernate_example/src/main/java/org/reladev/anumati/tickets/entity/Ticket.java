@@ -14,8 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
+import org.reladev.anumati.AuthReference;
 import org.reladev.anumati.SecuredParentChild;
-import org.reladev.anumati.SecuredReference;
 import org.reladev.anumati.tickets.auth.SecurityObjectType;
 
 
@@ -49,7 +49,7 @@ public class Ticket extends SecuredEntity {
     }
 
     @Override
-    protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
+    protected Set<? extends AuthReference> getSecuredReferencesForEdit() {
         return securityReferences;
     }
 

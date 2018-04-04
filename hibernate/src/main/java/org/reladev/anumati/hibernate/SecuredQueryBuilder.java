@@ -11,7 +11,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.reladev.anumati.SecuredAction;
+import org.reladev.anumati.AuthAction;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecurityContext;
@@ -24,16 +24,16 @@ public class SecuredQueryBuilder <T extends SecuredByRef> {
 	private boolean ignoreSecurity = false;
 
 	private SecuredObjectType type;
-	private SecuredAction action;
-	private CriteriaBuilder builder;
-	private CriteriaQuery<T> query;
-	private Root<T> root;
+    private AuthAction action;
+    private CriteriaBuilder builder;
+    private CriteriaQuery<T> query;
+    private Root<T> root;
 	private EntityManager entityManager;
 
-	public SecuredQueryBuilder(EntityManager entityManager, Class<T> entityClass, SecuredObjectType type, SecuredAction action) {
-		this.entityManager = entityManager;
-		this.type = type;
-		this.action = action;
+    public SecuredQueryBuilder(EntityManager entityManager, Class<T> entityClass, SecuredObjectType type, AuthAction action) {
+        this.entityManager = entityManager;
+        this.type = type;
+        this.action = action;
 		builder = entityManager.getCriteriaBuilder();
 		query = builder.createQuery(entityClass);
 		root = query.distinct(true).from(entityClass);
@@ -81,8 +81,8 @@ public class SecuredQueryBuilder <T extends SecuredByRef> {
 		return resultList;
 	}
 
-	public static Predicate getSecurityPredicate(SecuredAction action, CriteriaBuilder builder, Root root, SecuredObjectType type) {
-		Predicate securityClause = null;
+    public static Predicate getSecurityPredicate(AuthAction action, CriteriaBuilder builder, Root root, SecuredObjectType type) {
+        Predicate securityClause = null;
 
 		UserPermissions userPermissions = SecurityContext.getUserPermissions();
 
@@ -108,7 +108,7 @@ public class SecuredQueryBuilder <T extends SecuredByRef> {
 		return "inner join e.securityReferences ref ";
 	}
 
-	public static String getSecurityWhere(SecuredObjectType objectType, SecuredAction action) {
+    public static String getSecurityWhere(SecuredObjectType objectType, AuthAction action) {
 
 		UserPermissions userPermissions = SecurityContext.getUserPermissions();
 

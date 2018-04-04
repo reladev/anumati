@@ -17,15 +17,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Where;
-import org.reladev.anumati.SecuredReference;
-import org.reladev.anumati.SecuredReferenceObject;
-import org.reladev.anumati.SecuredReferenceType;
+import org.reladev.anumati.AuthReference;
+import org.reladev.anumati.AuthReferenceObject;
+import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.hibernate_test.security.CompanyOwned;
 import org.reladev.anumati.hibernate_test.security.SecurityObjectType;
 import org.reladev.anumati.hibernate_test.security.SecurityReferenceType;
 
 @Entity
-public class Project extends SecuredEntity implements SecuredReferenceObject, CompanyOwned {
+public class Project extends SecuredEntity implements AuthReferenceObject, CompanyOwned {
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -50,14 +50,14 @@ public class Project extends SecuredEntity implements SecuredReferenceObject, Co
 	}
 
 	@Override
-	public SecuredReferenceType getSecuredReferenceType() {
+    public AuthReferenceType getSecuredReferenceType() {
         return SecurityReferenceType.PROJECT;
     }
 
 	@Override
-	public Set<SecuredReferenceObject> getIncludedReferenceObjects() {
-		return Collections.singleton(company);
-	}
+    public Set<AuthReferenceObject> getIncludedReferenceObjects() {
+        return Collections.singleton(company);
+    }
 
     protected Project(Long id) {
         super(SecurityObjectType.PROJECT);
@@ -66,13 +66,13 @@ public class Project extends SecuredEntity implements SecuredReferenceObject, Co
     }
 
 	@Override
-	protected Set<? extends SecuredReference> getSecuredReferencesForEdit() {
-		return securityReferences;
-	}
+    protected Set<? extends AuthReference> getSecuredReferencesForEdit() {
+        return securityReferences;
+    }
 
 	@Override
-	public void setOwner(SecuredReferenceObject refObj) {
-		super.setOwner(refObj);
+    public void setOwner(AuthReferenceObject refObj) {
+        super.setOwner(refObj);
 
 		company = (Company) refObj;
 	}

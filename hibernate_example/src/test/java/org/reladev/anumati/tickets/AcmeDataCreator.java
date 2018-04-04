@@ -10,7 +10,9 @@ import org.reladev.anumati.tickets.entity.User;
 import org.reladev.anumati.tickets.repository.CompanyRepository;
 import org.reladev.anumati.tickets.repository.RoleRepository;
 import org.reladev.anumati.tickets.repository.UserRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AcmeDataCreator {
     public Company Acme;
     public Company ECorp;

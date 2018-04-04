@@ -1,6 +1,6 @@
 package org.reladev.anumati;
 
-public class SimpleSecuredUser implements SecuredUser {
+public class SimpleAuthUser implements AuthUser {
     UserPermissions userPermissions = new UserPermissions();
 
     @Override
@@ -10,7 +10,7 @@ public class SimpleSecuredUser implements SecuredUser {
 
 
     public static class Builder {
-        SimpleSecuredUser user = new SimpleSecuredUser();
+        SimpleAuthUser user = new SimpleAuthUser();
 
         public Builder() {
         }
@@ -20,17 +20,17 @@ public class SimpleSecuredUser implements SecuredUser {
             return this;
         }
 
-        public Builder withRoles(SecuredRole... roles) {
+        public Builder withRoles(AuthRole... roles) {
             user.userPermissions.addRoles(roles);
             return this;
         }
 
-        public Builder withPrivileges(SecuredPrivilege... privileges) {
+        public Builder withPrivileges(AuthPrivilege... privileges) {
             user.userPermissions.addPrivileges(privileges);
             return this;
         }
 
-        public SimpleSecuredUser getUser() {
+        public SimpleAuthUser getUser() {
             return user;
         }
     }

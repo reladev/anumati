@@ -1,6 +1,6 @@
 package org.reladev.anumati;
 
-public interface SecuredUser {
+public interface AuthUser {
 
 	UserPermissions getUserPermissions();
 }

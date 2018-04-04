@@ -4,14 +4,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Objects;
 
 public class UserPermissions implements Iterable<UserReferencePermissions> {
-
-	private boolean superAdmin;
-    private HashSet<SecuredRole> roles = new HashSet<>();
-    private HashSet<SecuredPrivilege> privileges = new HashSet<>();
+    private boolean superAdmin;
+    private HashSet<AuthRole> roles = new HashSet<>();
+    private HashSet<AuthPrivilege> privileges = new HashSet<>();
     private HashMap<ReferenceKey, UserReferencePermissions> referenceMap = new HashMap<>();
+
+    public UserPermissions() {}
+
+    public UserPermissions(Iterable<AuthPermissions> permissions) {
+
+
+    }
 
     ////////////////////////////////////////////////////////////////
     //  Admin Methods
@@ -30,11 +35,11 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
     //  Role Methods
     ////////////////////////////////////////////////////////////////
 
-    public boolean hasRole(SecuredRole role) {
+    public boolean hasRole(AuthRole role) {
         return roles.contains(role);
     }
 
-    public boolean hasRole(SecuredReference ref, SecuredRole role) {
+    public boolean hasRole(AuthReference ref, AuthRole role) {
         ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
         UserReferencePermissions refPermissions = referenceMap.get(key);
         if (refPermissions != null) {
@@ -43,11 +48,11 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
         return false;
     }
 
-    public void addRoles(SecuredRole... newRoles) {
+    public void addRoles(AuthRole... newRoles) {
         this.roles.addAll(Arrays.asList(newRoles));
     }
 
-    public void removeRoles(SecuredRole... removeRoles) {
+    public void removeRoles(AuthRole... removeRoles) {
         this.roles.removeAll(Arrays.asList(removeRoles));
     }
 
@@ -55,11 +60,11 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
     //  Privilege Methods
     ////////////////////////////////////////////////////////////////
 
-    public boolean hasPrivilege(SecuredPrivilege privilege) {
+    public boolean hasPrivilege(AuthPrivilege privilege) {
         return privileges.contains(privilege);
     }
 
-    public boolean hasPrivilege(SecuredReference ref, SecuredPrivilege privilege) {
+    public boolean hasPrivilege(AuthReference ref, AuthPrivilege privilege) {
         ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
         UserReferencePermissions refPermissions = referenceMap.get(key);
         if (refPermissions != null) {
@@ -68,12 +73,12 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
         return false;
     }
 
-    public void addPrivileges(SecuredPrivilege... newPrivilege) {
+    public void addPrivileges(AuthPrivilege... newPrivilege) {
         privileges.addAll(Arrays.asList(newPrivilege));
 
     }
 
-    public void removePrivileges(SecuredPrivilege... removePrivileges) {
+    public void removePrivileges(AuthPrivilege... removePrivileges) {
         privileges.removeAll(Arrays.asList(removePrivileges));
     }
 
@@ -82,11 +87,11 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
     ////////////////////////////////////////////////////////////////
 
 
-	public UserReferencePermissions get(Object id, SecuredReferenceType type) {
-		return referenceMap.get(new ReferenceKey(id, type));
-	}
+    public UserReferencePermissions get(Object id, AuthReferenceType type) {
+        return referenceMap.get(new ReferenceKey(id, type));
+    }
 
-    public UserReferencePermissions getOrCreate(Object id, SecuredReferenceType type) {
+    public UserReferencePermissions getOrCreate(Object id, AuthReferenceType type) {
         UserReferencePermissions refPermissions = referenceMap.get(new ReferenceKey(id, type));
         if (refPermissions == null) {
             refPermissions = new UserReferencePermissions(id, type);
@@ -105,47 +110,23 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
         return referenceMap.values().iterator();
     }
 
-	public void remove(Object id, SecuredReferenceType type) {
-		referenceMap.remove(new ReferenceKey(id, type));
-	}
+    public void remove(Object id, AuthReferenceType type) {
+        referenceMap.remove(new ReferenceKey(id, type));
+    }
 
-	public SecuredActionsSet getAllowedActions(SecuredReference ref) {
-		ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-		UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
-		if (UserReferencePermissions != null) {
+    public AuthActionSet getAllowedActions(AuthReference ref) {
+        ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
+        UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
+        if (UserReferencePermissions != null) {
 			return UserReferencePermissions.getAllowedActions(ref.getObjectType());
 		} else {
-			return new SecuredActionsSet();
-		}
-	}
+            return new AuthActionSet();
+        }
+    }
 
-	public boolean isAdmin(SecuredReference ref) {
-		ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-		UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
-		return UserReferencePermissions != null && UserReferencePermissions.isAdmin();
-	}
-
-	private class ReferenceKey {
-		Object id;
-		SecuredReferenceType type;
-
-		public ReferenceKey(Object id, SecuredReferenceType type) {
-			this.id = id;
-			this.type = type;
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			ReferenceKey that = (ReferenceKey) o;
-			return type == that.type &&
-					Objects.equals(id, that.id);
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(type, id);
-		}
+    public boolean isAdmin(AuthReference ref) {
+        ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
+        UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
+        return UserReferencePermissions != null && UserReferencePermissions.isAdmin();
 	}
 }

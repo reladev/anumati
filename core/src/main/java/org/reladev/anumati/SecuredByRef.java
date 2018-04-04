@@ -7,10 +7,13 @@ public interface SecuredByRef {
 	SecuredObjectType getSecuredObjectType();
 
 
-	Set<SecuredReference> getSecuredReferences();
-	void addSecuredReference(SecuredReferenceObject refObj, boolean owner, SecuredAction... actions);
-	void addSecuredReference(SecuredReference ref);
-	void removeSecuredReference(SecuredReferenceObject refObj);
+    Set<AuthReference> getSecuredReferences();
+
+    void addSecuredReference(AuthReferenceObject refObj, boolean owner, AuthAction... actions);
+
+    void addSecuredReference(AuthReference ref);
+
+    void removeSecuredReference(AuthReferenceObject refObj);
 
 	Set<SecuredParentChild> getChildReferences();
 

@@ -1,9 +1,9 @@
 package org.reladev.anumati.hibernate_test.security;
 
-import org.reladev.anumati.SecuredReferenceType;
+import org.reladev.anumati.AuthReferenceType;
 
-public enum SecurityReferenceType implements SecuredReferenceType {
-	COMPANY,
+public enum SecurityReferenceType implements AuthReferenceType {
+    COMPANY,
     PROJECT,
     USER(true);
 

@@ -1,8 +1,8 @@
 package org.reladev.anumati.tickets;
 
-import org.reladev.anumati.SecuredAction;
+import org.reladev.anumati.AuthAction;
 
-public enum TicketsAction implements SecuredAction {
+public enum TicketsAction implements AuthAction {
     CREATE(0),
     READ(1),
     UPDATE(2),

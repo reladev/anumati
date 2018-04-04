@@ -1,8 +1,8 @@
 package org.reladev.anumati.tickets;
 
-import org.reladev.anumati.SecuredPrivilege;
+import org.reladev.anumati.AuthPrivilege;
 
-public enum TicketsPrivilege implements SecuredPrivilege {
+public enum TicketsPrivilege implements AuthPrivilege {
     CompanyCreate,
     CompanyRead,
     CompanyUpdate,
