@@ -12,11 +12,11 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.reladev.anumati.AuthAction;
+import org.reladev.anumati.ParsedPermissions;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.UserPermissions;
-import org.reladev.anumati.UserReferencePermissions;
 
 public class SecuredQueryBuilder <T extends SecuredByRef> {
 	private LinkedList<Predicate> predicates = new LinkedList<>();
@@ -87,8 +87,8 @@ public class SecuredQueryBuilder <T extends SecuredByRef> {
 		UserPermissions userPermissions = SecurityContext.getUserPermissions();
 
 		Join refJoin = root.join("securityReferences");
-		for (UserReferencePermissions permissions: userPermissions) {
-			if (permissions.getAllowedActions(type).contains(action)) {
+        for (ParsedPermissions permissions : userPermissions) {
+            if (permissions.getAllowedActions(type).contains(action)) {
 				if (securityClause == null) {
 					securityClause = builder.and(
 						  builder.equal(refJoin.get("referenceId"), permissions.getReferenceId()),
@@ -116,8 +116,8 @@ public class SecuredQueryBuilder <T extends SecuredByRef> {
 		refClause.append("(");
 
 		boolean first = true;
-		for (UserReferencePermissions permissions: userPermissions) {
-			if (permissions.getAllowedActions(objectType).contains(action)) {
+        for (ParsedPermissions permissions : userPermissions) {
+            if (permissions.getAllowedActions(objectType).contains(action)) {
 				if (first) {
 					first = false;
 				} else {

@@ -3,7 +3,7 @@ package org.reladev.anumati;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class UserReferencePermissions {
+public class ParsedPermissions {
     private Object referenceId;
     private AuthReferenceType referenceType;
 
@@ -12,9 +12,9 @@ public class UserReferencePermissions {
     private HashSet<AuthPrivilege> privileges = new HashSet<>();
     private HashMap<SecuredObjectType, AuthActionSet> actionsMap = new HashMap<>();
 
-    private UserReferencePermissions() {}
+    private ParsedPermissions() {}
 
-    public UserReferencePermissions(Object referenceId, AuthReferenceType referenceType) {
+    public ParsedPermissions(Object referenceId, AuthReferenceType referenceType) {
         this.referenceId = referenceId;
         this.referenceType = referenceType;
     }

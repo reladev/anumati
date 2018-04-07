@@ -20,8 +20,8 @@ import org.hibernate.annotations.Where;
 import org.reladev.anumati.AuthReference;
 import org.reladev.anumati.AuthReferenceObject;
 import org.reladev.anumati.AuthReferenceType;
-import org.reladev.anumati.tickets.auth.SecurityObjectType;
-import org.reladev.anumati.tickets.auth.SecurityReferenceType;
+import org.reladev.anumati.tickets.auth.ReferenceType;
+import org.reladev.anumati.tickets.auth.SecuredType;
 
 @Entity
 public class Project extends SecuredEntity implements AuthReferenceObject {
@@ -32,7 +32,7 @@ public class Project extends SecuredEntity implements AuthReferenceObject {
     @SuppressWarnings("JpaDataSourceORMInspection")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "object_id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    @Where(clause = "object_type=" + SecurityObjectType.PROJECT_ORDINAL)
+    @Where(clause = "object_type=" + SecuredType.PROJECT_ORDINAL)
     private Set<SecurityReference> securityReferences = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -43,7 +43,13 @@ public class Project extends SecuredEntity implements AuthReferenceObject {
 
 
     public Project() {
-        super(SecurityObjectType.PROJECT);
+        super(SecuredType.PROJECT);
+    }
+
+    public Project(Company company, String name) {
+        this();
+        this.company = company;
+        this.name = name;
     }
 
     @Override
@@ -53,7 +59,7 @@ public class Project extends SecuredEntity implements AuthReferenceObject {
 
     @Override
     public AuthReferenceType getSecuredReferenceType() {
-        return SecurityReferenceType.PROJECT;
+        return ReferenceType.PROJECT;
     }
 
     @Override

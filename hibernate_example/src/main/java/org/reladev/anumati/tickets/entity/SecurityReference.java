@@ -14,9 +14,8 @@ import org.reladev.anumati.AuthReference;
 import org.reladev.anumati.AuthReferenceObject;
 import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.SecuredByRef;
-import org.reladev.anumati.SecuredObjectType;
-import org.reladev.anumati.tickets.auth.SecurityObjectType;
-import org.reladev.anumati.tickets.auth.SecurityReferenceType;
+import org.reladev.anumati.tickets.auth.ReferenceType;
+import org.reladev.anumati.tickets.auth.SecuredType;
 
 @Entity
 public class SecurityReference implements AuthReference {
@@ -27,9 +26,9 @@ public class SecurityReference implements AuthReference {
 
     @Formula("object_id")
     private Long objectId;
-    private SecurityObjectType objectType;
+    private SecuredType objectType;
     private Long referenceId;
-    private SecurityReferenceType referenceType;
+    private ReferenceType referenceType;
 
     private boolean owner;
     private boolean fixed;
@@ -43,14 +42,14 @@ public class SecurityReference implements AuthReference {
         this(object.getId(), object.getSecuredObjectType(), refObj.getId(), refObj.getSecuredReferenceType());
     }
 
-    public SecurityReference(Object objectId, SecuredObjectType objectType, Object referenceId, AuthReferenceType referenceType) {
+    public SecurityReference(Object objectId, org.reladev.anumati.SecuredObjectType objectType, Object referenceId, AuthReferenceType referenceType) {
         if (referenceId == null) {
             throw new NullPointerException("referenceId");
         }
         this.objectId = (Long) objectId;
-        this.objectType = (SecurityObjectType) objectType;
+        this.objectType = (SecuredType) objectType;
         this.referenceId = (Long) referenceId;
-        this.referenceType = (SecurityReferenceType) referenceType;
+        this.referenceType = (ReferenceType) referenceType;
     }
 
     public Long getId() {
@@ -65,11 +64,11 @@ public class SecurityReference implements AuthReference {
         this.objectId = (Long) objectId;
     }
 
-    public SecuredObjectType getObjectType() {
+    public org.reladev.anumati.SecuredObjectType getObjectType() {
         return objectType;
     }
 
-    public void setObjectType(SecurityObjectType objectType) {
+    public void setObjectType(SecuredType objectType) {
         this.objectType = objectType;
     }
 
@@ -81,11 +80,11 @@ public class SecurityReference implements AuthReference {
         this.referenceId = (Long) referenceId;
     }
 
-    public SecurityReferenceType getReferenceType() {
+    public ReferenceType getReferenceType() {
         return referenceType;
     }
 
-    public void setReferenceType(SecurityReferenceType referenceType) {
+    public void setReferenceType(ReferenceType referenceType) {
         this.referenceType = referenceType;
     }
 

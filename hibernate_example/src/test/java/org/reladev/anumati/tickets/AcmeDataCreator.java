@@ -4,12 +4,18 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import org.reladev.anumati.SecurityContext;
+import org.reladev.anumati.tickets.dto.PermissionsDto;
 import org.reladev.anumati.tickets.entity.Company;
+import org.reladev.anumati.tickets.entity.Project;
 import org.reladev.anumati.tickets.entity.Role;
 import org.reladev.anumati.tickets.entity.User;
 import org.reladev.anumati.tickets.repository.CompanyRepository;
+import org.reladev.anumati.tickets.repository.ProjectRepository;
 import org.reladev.anumati.tickets.repository.RoleRepository;
 import org.reladev.anumati.tickets.repository.UserRepository;
+import org.reladev.anumati.tickets.service.PermissionsService;
+import org.reladev.anumati.tickets.service.UserService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,12 +33,20 @@ public class AcmeDataCreator {
     public User JoeDev;
     public User JaneEmployee;
 
+    public Project WebUi;
+
     @Inject
     CompanyRepository companyRepository;
     @Inject
     RoleRepository roleRepository;
     @Inject
     UserRepository userRepository;
+    @Inject
+    UserService userService;
+    @Inject
+    PermissionsService permissionService;
+    @Inject
+    ProjectRepository projectRepository;
 
     public void create() {
         createCompany();
@@ -65,5 +79,20 @@ public class AcmeDataCreator {
         userRepository.save(JoeDev);
         JaneEmployee = new User(Acme, "jane", "password", TicketsRole.EMPLOYEE);
         userRepository.save(JoeDev);
+    }
+
+    public void createProject() {
+        WebUi = new Project(Acme, "WebUI");
+        projectRepository.save(WebUi);
+
+        SecurityContext.setSecuredUserContext(() -> SallyAdmin);
+
+        PermissionsDto permissions = new PermissionsDto();
+        permissions.setUserId(MikeManager.getId());
+        permissions.setReferenceId(WebUi.getId());
+        permissions.setReferenceType(WebUi.getSecuredReferenceType());
+
+        permissionService.updateCreate(permissions);
+
     }
 }

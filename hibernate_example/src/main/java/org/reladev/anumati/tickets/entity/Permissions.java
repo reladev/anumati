@@ -1,6 +1,5 @@
 package org.reladev.anumati.tickets.entity;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,11 +14,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import org.reladev.anumati.tickets.auth.SecurityObjectType;
+import org.reladev.anumati.AuthPermissions;
+import org.reladev.anumati.AuthReferenceType;
+import org.reladev.anumati.ReferenceKey;
+import org.reladev.anumati.tickets.auth.ReferenceType;
 
 
 @Entity
-public class Permissions {
+public class Permissions implements AuthPermissions {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,8 +30,9 @@ public class Permissions {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Long object_id;
-    private SecurityObjectType objectType;
+    private Long refId;
+    private ReferenceType refType;
+    private transient ReferenceKey referenceKey;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "Permission_Role", joinColumns = {@JoinColumn(name = "permission_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
@@ -37,9 +40,21 @@ public class Permissions {
 
     @SuppressWarnings("JpaAttributeTypeInspection")
     @Column(columnDefinition = "TEXT")
-    private List<String> privileges;
+    private Set<String> privileges;
 
-    public Permissions() {
+    protected Permissions() {
+    }
+
+    public Permissions(User user, Long refId, AuthReferenceType refType) {
+        this.user = user;
+        this.refId = refId;
+        this.refType = (ReferenceType) refType;
+    }
+
+    public Permissions(User user, ReferenceKey refKey) {
+        this.user = user;
+        this.refId = (Long) refKey.getId();
+        this.refType = (ReferenceType) refKey.getType();
     }
 
     public Long getId() {
@@ -50,27 +65,32 @@ public class Permissions {
         this.id = id;
     }
 
-    public Long getObject_id() {
-        return object_id;
+    public Long getReferenceId() {
+        return refId;
     }
 
-    public void setObject_id(Long object_id) {
-        this.object_id = object_id;
+    public ReferenceType getReferenceType() {
+        return refType;
     }
 
-    public SecurityObjectType getObjectType() {
-        return objectType;
+    public ReferenceKey getReferenceKey() {
+        if (referenceKey == null) {
+            referenceKey = new ReferenceKey(refId, refType);
+        }
+
+        return referenceKey;
     }
 
-    public void setObjectType(SecurityObjectType objectType) {
-        this.objectType = objectType;
-    }
-
-    public List<String> getPrivileges() {
+    public Set<String> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(List<String> privileges) {
-        this.privileges = privileges;
+    @Override
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

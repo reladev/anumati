@@ -10,11 +10,11 @@ import org.reladev.anumati.AuthPrivilege;
 import org.reladev.anumati.AuthReferenceObject;
 import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.AuthRole;
+import org.reladev.anumati.ParsedPermissions;
 import org.reladev.anumati.SecuredByRef;
 import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecurityContext;
 import org.reladev.anumati.UserPermissions;
-import org.reladev.anumati.UserReferencePermissions;
 import org.reladev.anumati.hibernate_test.entity.User;
 import org.reladev.anumati.hibernate_test.entity.UserFactory;
 import org.reladev.anumati.hibernate_test.security.SecurityAction;
@@ -55,7 +55,7 @@ public class TestSecurityContext {
 	}
 
     public static void setAdminPermissions(AuthReferenceObject refObj, boolean admin) {
-        UserReferencePermissions permissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
+        ParsedPermissions permissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
         permissions.setAdmin(admin);
     }
 
@@ -71,7 +71,7 @@ public class TestSecurityContext {
     }
 
     public static void addRoles(AuthReferenceObject refObj, AuthRole... roles) {
-        UserReferencePermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
+        ParsedPermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
         for (AuthRole role : roles) {
             refPermissions.addRole(role);
         }
@@ -89,7 +89,7 @@ public class TestSecurityContext {
     }
 
     public static void addPrivileges(AuthReferenceObject refObj, AuthPrivilege... privileges) {
-        UserReferencePermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
+        ParsedPermissions refPermissions = userPermissions.getOrCreate(refObj.getId(), refObj.getSecuredReferenceType());
         for (AuthPrivilege privilege : privileges) {
             refPermissions.addPrivilege(privilege);
         }
@@ -100,7 +100,7 @@ public class TestSecurityContext {
     ////////////////////////////////////////////////////////////////
 
     public static void setPermissions(AuthReferenceObject refObj, SecuredObjectType type, AuthAction... actions) {
-        UserReferencePermissions permissions = new UserReferencePermissions(refObj.getId(), refObj.getSecuredReferenceType());
+        ParsedPermissions permissions = new ParsedPermissions(refObj.getId(), refObj.getSecuredReferenceType());
         permissions.setAllowedActions(type, new AuthActionSet(actions));
         userPermissions.put(permissions);
     }
@@ -135,8 +135,8 @@ public class TestSecurityContext {
 		setSuperAdmin(false);
 	}
 
-    public static UserReferencePermissions createReferencePermissions(Object referenceId, AuthReferenceType referenceType, Collection<String> permissionsList) {
-        UserReferencePermissions referencePrivileges = new UserReferencePermissions(referenceId, referenceType);
+    public static ParsedPermissions createReferencePermissions(Object referenceId, AuthReferenceType referenceType, Collection<String> permissionsList) {
+        ParsedPermissions referencePrivileges = new ParsedPermissions(referenceId, referenceType);
         for (String permissions : permissionsList) {
             try {
 				String[] parts = permissions.split("_");

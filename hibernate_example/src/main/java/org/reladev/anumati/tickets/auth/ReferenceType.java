@@ -2,18 +2,18 @@ package org.reladev.anumati.tickets.auth;
 
 import org.reladev.anumati.AuthReferenceType;
 
-public enum SecurityReferenceType implements AuthReferenceType {
+public enum ReferenceType implements AuthReferenceType {
     COMPANY,
     PROJECT,
     USER(true);
 
     private boolean checkRefOnly;
 
-    SecurityReferenceType() {
+    ReferenceType() {
         this(false);
     }
 
-    SecurityReferenceType(boolean checkRefOnly) {
+    ReferenceType(boolean checkRefOnly) {
         this.checkRefOnly = checkRefOnly;
     }
 

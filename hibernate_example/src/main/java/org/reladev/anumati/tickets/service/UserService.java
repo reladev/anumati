@@ -14,7 +14,6 @@ public class UserService {
     @Inject
     UserRepository userRepository;
 
-
     public UserDto convert(User user) {
         UserDto dto = new UserDto();
         dto.copyTo(user);

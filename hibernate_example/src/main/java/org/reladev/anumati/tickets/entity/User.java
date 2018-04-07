@@ -1,11 +1,9 @@
 package org.reladev.anumati.tickets.entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,8 +22,8 @@ import org.reladev.anumati.AuthReferenceType;
 import org.reladev.anumati.AuthUser;
 import org.reladev.anumati.UserPermissions;
 import org.reladev.anumati.tickets.TicketsRole;
-import org.reladev.anumati.tickets.auth.SecurityObjectType;
-import org.reladev.anumati.tickets.auth.SecurityReferenceType;
+import org.reladev.anumati.tickets.auth.ReferenceType;
+import org.reladev.anumati.tickets.auth.SecuredType;
 
 @Entity
 public class User extends SecuredEntity implements AuthUser, AuthReferenceObject {
@@ -36,7 +34,7 @@ public class User extends SecuredEntity implements AuthUser, AuthReferenceObject
     @SuppressWarnings("JpaDataSourceORMInspection")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "object_id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    @Where(clause = "object_type=" + SecurityObjectType.USER_ORDINAL)
+    @Where(clause = "object_type=" + SecuredType.USER_ORDINAL)
     private Set<SecurityReference> securityReferences = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -46,17 +44,14 @@ public class User extends SecuredEntity implements AuthUser, AuthReferenceObject
     private String username;
     private String password;
 
-    @SuppressWarnings("JpaAttributeTypeInspection")
-    @Column(columnDefinition = "TEXT")
-    private List<String> privileges;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Permissions> allPermissions;
 
-    @SuppressWarnings("JpaAttributeTypeInspection")
-    @Column(columnDefinition = "TEXT")
-    private UserPermissions userPermissions;
+    private transient UserPermissions userPermissions;
 
 
     public User() {
-        super(SecurityObjectType.USER);
+        super(SecuredType.USER);
     }
 
     public User(Company company, String username, String password, TicketsRole role) {
@@ -73,12 +68,15 @@ public class User extends SecuredEntity implements AuthUser, AuthReferenceObject
 
     @Override
     public UserPermissions getUserPermissions() {
+        if (userPermissions == null) {
+            userPermissions = new UserPermissions(allPermissions);
+        }
         return userPermissions;
     }
 
     @Override
     public AuthReferenceType getSecuredReferenceType() {
-        return SecurityReferenceType.USER;
+        return ReferenceType.USER;
     }
 
     @Override
@@ -108,17 +106,5 @@ public class User extends SecuredEntity implements AuthUser, AuthReferenceObject
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setUserPermissions(UserPermissions userPermissions) {
-        this.userPermissions = userPermissions;
-    }
-
-    public List<String> getPrivileges() {
-        return privileges;
-    }
-
-    public void setPrivileges(List<String> privileges) {
-        this.privileges = privileges;
     }
 }

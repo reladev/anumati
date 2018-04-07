@@ -23,8 +23,13 @@ public enum SecurityAction implements AuthAction {
 		return ordinal();
 	}
 
-	public static SecurityAction valueOfAbbreviation(char abbreviation) {
-		for (SecurityAction action: values()) {
+    @Override
+    public char getAbbreviation() {
+        return abbreviation;
+    }
+
+    public static SecurityAction valueOfAbbreviation(char abbreviation) {
+        for (SecurityAction action: values()) {
 			if (action.abbreviation == abbreviation) {
 				return action;
 			}

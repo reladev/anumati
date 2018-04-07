@@ -8,7 +8,7 @@ import org.reladev.anumati.tickets.entity.Role;
 import org.reladev.anumati.tickets.entity.Ticket;
 import org.reladev.anumati.tickets.entity.User;
 
-public enum SecurityObjectType implements SecuredObjectType {
+public enum SecuredType implements SecuredObjectType {
     COMPANY(Company.class),
     PROJECT(Project.class),
     USER(User.class),
@@ -23,7 +23,7 @@ public enum SecurityObjectType implements SecuredObjectType {
 
     private Class<? extends SecuredByRef> typeClass;
 
-    SecurityObjectType(Class<? extends SecuredByRef> typeClass) {
+    SecuredType(Class<? extends SecuredByRef> typeClass) {
         this.typeClass = typeClass;
     }
 

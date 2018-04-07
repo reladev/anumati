@@ -11,6 +11,14 @@ public class ReferenceKey {
         this.type = type;
     }
 
+    public Object getId() {
+        return id;
+    }
+
+    public AuthReferenceType getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

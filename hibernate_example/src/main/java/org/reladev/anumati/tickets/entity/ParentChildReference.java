@@ -10,9 +10,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Formula;
 import org.reladev.anumati.SecuredByRef;
-import org.reladev.anumati.SecuredObjectType;
 import org.reladev.anumati.SecuredParentChild;
-import org.reladev.anumati.tickets.auth.SecurityObjectType;
+import org.reladev.anumati.tickets.auth.SecuredType;
 
 @Entity
 @Table(name = "parent_child")
@@ -24,10 +23,10 @@ public class ParentChildReference implements SecuredParentChild {
 
     @Formula("parent_id")
     private Long parentId;
-    private SecurityObjectType parentType;
+    private SecuredType parentType;
 
     private Long childId;
-    private SecurityObjectType childType;
+    private SecuredType childType;
 
     protected ParentChildReference() {
     }
@@ -36,11 +35,11 @@ public class ParentChildReference implements SecuredParentChild {
         this(parent.getId(), parent.getSecuredObjectType(), child.getId(), child.getSecuredObjectType());
     }
 
-    public ParentChildReference(Object parentId, SecuredObjectType parentType, Object childId, SecuredObjectType childType) {
+    public ParentChildReference(Object parentId, org.reladev.anumati.SecuredObjectType parentType, Object childId, org.reladev.anumati.SecuredObjectType childType) {
         this.parentId = (Long) parentId;
-        this.parentType = (SecurityObjectType) parentType;
+        this.parentType = (SecuredType) parentType;
         this.childId = (Long) childId;
-        this.childType = (SecurityObjectType) childType;
+        this.childType = (SecuredType) childType;
     }
 
     public Long getId() {
@@ -59,11 +58,11 @@ public class ParentChildReference implements SecuredParentChild {
         this.parentId = (Long) parentId;
     }
 
-    public SecurityObjectType getParentType() {
+    public SecuredType getParentType() {
         return parentType;
     }
 
-    public void setParentType(SecurityObjectType parentType) {
+    public void setParentType(SecuredType parentType) {
         this.parentType = parentType;
     }
 
@@ -75,11 +74,11 @@ public class ParentChildReference implements SecuredParentChild {
         this.childId = (Long) childId;
     }
 
-    public SecurityObjectType getChildType() {
+    public SecuredType getChildType() {
         return childType;
     }
 
-    public void setChildType(SecurityObjectType childType) {
+    public void setChildType(SecuredType childType) {
         this.childType = childType;
     }
 

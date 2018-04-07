@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Where;
 import org.reladev.anumati.AuthReference;
 import org.reladev.anumati.SecuredParentChild;
-import org.reladev.anumati.tickets.auth.SecurityObjectType;
+import org.reladev.anumati.tickets.auth.SecuredType;
 
 
 @Entity
@@ -28,12 +28,12 @@ public class Ticket extends SecuredEntity {
     @SuppressWarnings("JpaDataSourceORMInspection")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "object_id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    @Where(clause = "object_type=" + SecurityObjectType.TICKET_ORDINAL)
+    @Where(clause = "object_type=" + SecuredType.TICKET_ORDINAL)
     private Set<SecurityReference> securityReferences = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
-    @Where(clause = "parent_type=" + SecurityObjectType.TICKET_ORDINAL)
+    @Where(clause = "parent_type=" + SecuredType.TICKET_ORDINAL)
     private Set<ParentChildReference> childReferences = new HashSet<>();
 
     private Long companyId;
@@ -45,7 +45,7 @@ public class Ticket extends SecuredEntity {
     private String description;
 
     public Ticket() {
-        super(SecurityObjectType.TICKET);
+        super(SecuredType.TICKET);
     }
 
     @Override

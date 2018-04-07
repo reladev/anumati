@@ -5,15 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class UserPermissions implements Iterable<UserReferencePermissions> {
+/**
+ * A reference object for the user's permissions.
+ */
+public class UserPermissions implements Iterable<ParsedPermissions> {
     private boolean superAdmin;
     private HashSet<AuthRole> roles = new HashSet<>();
     private HashSet<AuthPrivilege> privileges = new HashSet<>();
-    private HashMap<ReferenceKey, UserReferencePermissions> referenceMap = new HashMap<>();
+    private HashMap<ReferenceKey, ParsedPermissions> referenceMap = new HashMap<>();
 
     public UserPermissions() {}
 
-    public UserPermissions(Iterable<AuthPermissions> permissions) {
+    public UserPermissions(Iterable<? extends AuthPermissions> permissions) {
 
 
     }
@@ -41,7 +44,7 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 
     public boolean hasRole(AuthReference ref, AuthRole role) {
         ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-        UserReferencePermissions refPermissions = referenceMap.get(key);
+        ParsedPermissions refPermissions = referenceMap.get(key);
         if (refPermissions != null) {
             return refPermissions.hasRole(role);
         }
@@ -66,7 +69,7 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 
     public boolean hasPrivilege(AuthReference ref, AuthPrivilege privilege) {
         ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-        UserReferencePermissions refPermissions = referenceMap.get(key);
+        ParsedPermissions refPermissions = referenceMap.get(key);
         if (refPermissions != null) {
             return refPermissions.hasPrivilege(privilege);
         }
@@ -87,26 +90,26 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
     ////////////////////////////////////////////////////////////////
 
 
-    public UserReferencePermissions get(Object id, AuthReferenceType type) {
+    public ParsedPermissions get(Object id, AuthReferenceType type) {
         return referenceMap.get(new ReferenceKey(id, type));
     }
 
-    public UserReferencePermissions getOrCreate(Object id, AuthReferenceType type) {
-        UserReferencePermissions refPermissions = referenceMap.get(new ReferenceKey(id, type));
+    public ParsedPermissions getOrCreate(Object id, AuthReferenceType type) {
+        ParsedPermissions refPermissions = referenceMap.get(new ReferenceKey(id, type));
         if (refPermissions == null) {
-            refPermissions = new UserReferencePermissions(id, type);
+            refPermissions = new ParsedPermissions(id, type);
             referenceMap.put(new ReferenceKey(id, type), refPermissions);
         }
         return refPermissions;
     }
 
-	public void put(UserReferencePermissions privilegeMap) {
-		ReferenceKey referenceKey = new ReferenceKey(privilegeMap.getReferenceId(), privilegeMap.getReferenceType());
+    public void put(ParsedPermissions privilegeMap) {
+        ReferenceKey referenceKey = new ReferenceKey(privilegeMap.getReferenceId(), privilegeMap.getReferenceType());
 		referenceMap.put(referenceKey, privilegeMap);
 	}
 
     @Override
-    public Iterator<UserReferencePermissions> iterator() {
+    public Iterator<ParsedPermissions> iterator() {
         return referenceMap.values().iterator();
     }
 
@@ -116,17 +119,17 @@ public class UserPermissions implements Iterable<UserReferencePermissions> {
 
     public AuthActionSet getAllowedActions(AuthReference ref) {
         ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-        UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
-        if (UserReferencePermissions != null) {
-			return UserReferencePermissions.getAllowedActions(ref.getObjectType());
-		} else {
+        ParsedPermissions parsedPermissions = referenceMap.get(key);
+        if (parsedPermissions != null) {
+            return parsedPermissions.getAllowedActions(ref.getObjectType());
+        } else {
             return new AuthActionSet();
         }
     }
 
     public boolean isAdmin(AuthReference ref) {
         ReferenceKey key = new ReferenceKey(ref.getReferenceId(), ref.getReferenceType());
-        UserReferencePermissions UserReferencePermissions = referenceMap.get(key);
-        return UserReferencePermissions != null && UserReferencePermissions.isAdmin();
-	}
+        ParsedPermissions parsedPermissions = referenceMap.get(key);
+        return parsedPermissions != null && parsedPermissions.isAdmin();
+    }
 }
